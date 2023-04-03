@@ -67,10 +67,10 @@ input_parcels_fc_list = "*"
 
 # Workspaces
 input_parcels_gdb = r"P:\Projects3\CDT-CEQA_California_2019_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Parcels_Projected_Delete_Identical.gdb"
-output_gdb_data_basin = r"P:\Projects3\CEQA_Site_Check_Version_1_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Outputs\Outputs_for_DataBasin.gdb"
-output_gdb_dev_team = r'P:\Projects3\CEQA_Site_Check_Version_1_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Outputs\Outputs_for_DevTeam.gdb'
-intermediate_ws = "P:\Projects3\CEQA_Site_Check_Version_1_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Intermediate.gdb"
-scratch_ws = "P:\Projects3\CEQA_Site_Check_Version_1_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Scratch\Scratch.gdb"
+output_gdb_data_basin = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Outputs\Outputs_for_DataBasin.gdb"
+output_gdb_dev_team = r'P:\Projects3\CEQA_Site_Check_Version_2_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Outputs\Outputs_for_DevTeam.gdb'
+intermediate_ws = "P:\Projects3\CEQA_Site_Check_Version_2_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Intermediate.gdb"
+scratch_ws = "P:\Projects3\CEQA_Site_Check_Version_2_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Scratch\Scratch.gdb"
 
 # Toolbox containing models for processing additional requirements (from Charlotte Smith).
 statewide_toolbox = r"\\loxodonta\GIS\Projects\CEQA_Site_Check_Version_1_0_2021\Workspaces\CEQA_Site_Check_Version_1_0_2021_charlotte_smith\Tasks\CEQA_revisions_202205\Tools\Models\Statewide_2022_v1_0.tbx"
