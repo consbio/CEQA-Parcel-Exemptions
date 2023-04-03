@@ -73,7 +73,8 @@ intermediate_ws = "P:\Projects3\CEQA_Site_Check_Version_2_0_2021_mike_gough\Task
 scratch_ws = "P:\Projects3\CEQA_Site_Check_Version_2_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Scratch\Scratch.gdb"
 
 # Toolbox containing models for processing additional requirements (from Charlotte Smith).
-statewide_toolbox = r"\\loxodonta\GIS\Projects\CEQA_Site_Check_Version_1_0_2021\Workspaces\CEQA_Site_Check_Version_1_0_2021_charlotte_smith\Tasks\CEQA_revisions_202205\Tools\Models\Statewide_2022_v1_0.tbx"
+# Updated Toolbox for version 2.0. Provided by Charlotte on 3/08/2023
+statewide_toolbox = r"\\loxodonta\GIS\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_charlotte_smith\Tasks\CEQA_revisions_2023_03\Tools\Models\Statewide_2023_v2_0.tbx"
 statewide_toolbox_alias = "Statewide"
 arcpy.ImportToolbox(statewide_toolbox, statewide_toolbox_alias)
 
