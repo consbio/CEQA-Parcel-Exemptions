@@ -58,7 +58,7 @@ arcpy.CheckOutExtension("Spatial")
 requirements_to_process = ["3.6", "3.8"]
 input_parcels_fc_list = "*"
 
-input_parcels_fc_list = [
+#input_parcels_fc_list = [
     #"ALAMEDA_Parcels",
     #"ALPINE_Parcels",
     #"AMADOR_Parcels",
