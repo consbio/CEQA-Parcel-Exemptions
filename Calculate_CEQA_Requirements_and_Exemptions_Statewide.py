@@ -2,7 +2,7 @@
 # Script: Calculate CEQA Requirements and Exemptions (Statewide Implementation)
 # Author: Mike Gough
 # Date created: 03/17/2020
-# Date last modified: 06/21/2022
+# Date last modified: 04/03/2023
 # Python Version: 2.7
 # Description: This script calculates CEQA requirements & exemptions for parcels in the state of California.
 # Requirement calculations are based on the spatial relationships each parcel has with other spatial datasets
@@ -23,6 +23,8 @@
 # Each requirement is calculated either by a python function, or a call to an external ArcGIS Model.
 # The logic for each is defined by a set of methods in the RequirementFunctions class.
 # Use the function calls at the bottom of this script to choose which operations this script should perform.
+
+# NOTE: Must use the regular 32-bit ArcGIS python interpreter. The 64-bit version won't work.
 
 # RUNTIME DURATION: Note that this script takes approximately 1 week to run from start to finish when running all
 # counties and all requirements. It also begins to slow down over time. To increase the speed, run 50% of counties at
@@ -47,30 +49,83 @@ arcpy.CheckOutExtension("Spatial")
 # input_parcels_fc_list = ["SANBENITO_Parcels", "SANBERNARDINO_Parcels"].
 # For one county, also use a list. For example, ["SANBENITO_Parcels"]
 
-input_parcels_fc_list = "*"
-
 # Indicate the requirements to process.
 # Use "*" to process all requirements, or create a list of requirements to process. Examples:
 # requirements_to_process = "*"
 # requirements_to_process = ["3.10", "2.6"].
 # For one requirement, also use a list. For example, ["3.10"]
 
-requirements_to_process = "*"
-
-# 07/06/22 Run #1
-#requirements_to_process = ["2.6"]
-#input_parcels_fc_list = ["FRESNO_Parcels"]
-
-# 07/06/22 Run #2
-requirements_to_process = ["9.2", "9.3"]
+# 04/03/23 Run #1 (CEQA Phase 2.0)
+requirements_to_process = ["3.6", "3.8"]
 input_parcels_fc_list = "*"
+
+input_parcels_fc_list = [
+    #"ALAMEDA_Parcels",
+    #"ALPINE_Parcels",
+    #"AMADOR_Parcels",
+    #"BUTTE_Parcels",
+    #"CALAVERAS_Parcels",
+    #"COLUSA_Parcels",
+    #"CONTRACOSTA_Parcels",
+    #"DELNORTE_Parcels",
+    #"ELDORADO_Parcels",
+    #"FRESNO_Parcels",
+    #"GLENN_Parcels",
+    #"HUMBOLDT_Parcels",
+    #"IMPERIAL_Parcels",
+    #"INYO_Parcels",
+    #"KERN_Parcels",
+    #"KINGS_Parcels",
+    #"LAKE_Parcels",
+    #"LASSEN_Parcels",
+    #"LOSANGELES_Parcels",
+    #"MADERA_Parcels",
+    #"MARIN_Parcels",
+    #"MARIPOSA_Parcels",
+    #"MENDOCINO_Parcels",
+    #"MERCED_Parcels",
+    #"MODOC_Parcels",
+    #"MONO_Parcels",
+    #"MONTEREY_Parcels",
+    #"NAPA_Parcels",
+    #"NEVADA_Parcels",
+    #"ORANGE_Parcels",
+    #"PLACER_Parcels",
+    #"PLUMAS_Parcels",
+    #"RIVERSIDE_Parcels",
+    #"SACRAMENTO_Parcels",
+    #"SANBENITO_Parcels",
+    #"SANBERNARDINO_Parcels",
+    #"SANDIEGO_Parcels",
+    #"SANFRANCISCO_Parcels",
+    #"SANJOAQUIN_Parcels",
+    #"SANLUISOBISPO_Parcels",
+    #"SANMATEO_Parcels",
+    #"SANTABARBARA_Parcels",
+    #"SANTACLARA_Parcels",
+    #"SANTACRUZ_Parcels",
+    #"SHASTA_Parcels",
+    #"SIERRA_Parcels",
+    #"SISKIYOU_Parcels",
+    #"SOLANO_Parcels",
+    #"SONOMA_Parcels",
+    #"STANISLAUS_Parcels",
+    #"SUTTER_Parcels",
+    #"TEHAMA_Parcels",
+    #"TRINITY_Parcels",
+    #"TULARE_Parcels",
+    #"TUOLUMNE_Parcels",
+    #"VENTURA_Parcels",
+    #"YOLO_Parcels",
+    #"YUBA_Parcels",
+]
 
 # Workspaces
 input_parcels_gdb = r"P:\Projects3\CDT-CEQA_California_2019_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Parcels_Projected_Delete_Identical.gdb"
-output_gdb_data_basin = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Outputs\Outputs_for_DataBasin.gdb"
-output_gdb_dev_team = r'P:\Projects3\CEQA_Site_Check_Version_2_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Outputs\Outputs_for_DevTeam.gdb'
-intermediate_ws = "P:\Projects3\CEQA_Site_Check_Version_2_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Intermediate.gdb"
-scratch_ws = "P:\Projects3\CEQA_Site_Check_Version_2_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Scratch\Scratch.gdb"
+output_gdb_data_basin = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Outputs\Outputs_for_DataBasin.gdb"
+output_gdb_dev_team = r'P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Outputs\Outputs_for_DevTeam.gdb'
+intermediate_ws = "P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Intermediate.gdb"
+scratch_ws = "P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Scratch\Scratch.gdb"
 
 # Toolbox containing models for processing additional requirements (from Charlotte Smith).
 # Updated Toolbox for version 2.0. Provided by Charlotte on 3/08/2023
@@ -166,8 +221,8 @@ requirements = {
     "3.3": "transit_priority_area_3_3",
     "3.4": "within_half_mile_transit_corridor_3_4",
     "3.5": "within_half_mile_stop_transit_corridor_3_5",
-    #"3.6": "low_vmt_15_percent_below_regional_3_6", # 3.6 & 3.7 removed from the tool according to spreadsheet
-    #"3.7": "low_vmt_15_percent_below_city_3_7", # 3.6 & 3.7 removed from the tool according to spreadsheet
+    "3.6": "low_vmt_15_percent_below_regional_3_6",
+    #"3.7": "low_vmt_15_percent_below_city_3_7", # 3.7 removed from the tool according to spreadsheet
     "3.8": "low_vehicle_travel_area_3_8",
     "3.9": "planned_rtp_half_mile_major_transit_stop_3_9",
     "3.10": "planned_rtip_half_mile_major_transit_stop_3_10",
@@ -312,7 +367,8 @@ exemptions = {
     "21099": ["3.3"],
     "21159.28": ["2.5"],
     #"15064.3": [["3.1", "3.5", "3.6", "3.7"]]
-    "15064.3": [["3.1", "3.5"]] # Remove 3.6 and 3.7
+    #"15064.3": [["3.1", "3.5"]] # Remove 3.6 and 3.7
+     "15064.3": [["3.1", "3.5", "3.6"]] # Add 3.6 back in. We have 3.6 for CEQA Site Check version 2.0
 }
 
 
@@ -352,22 +408,25 @@ def delete_county_rows_from_dev_table(output_parcels_fc, table):
     # Get the name of the county that appears in the the attribute table.
     output_parcels_fc_layer = arcpy.MakeFeatureLayer_management(output_parcels_fc)
     arcpy.SelectLayerByAttribute_management(output_parcels_fc_layer, "NEW_SELECTION", "OBJECTID = 1")
+
     with arcpy.da.SearchCursor(output_parcels_fc_layer, "COUNTYNAME") as sc:
         for row in sc:
             county_name_in_att_table = row[0]
 
+    print "\nChecking to see if this county (%s) has rows in the dev table (%s)." % (county_name_in_att_table, table)
+
     temp_table_view = "temp_table_view"
     arcpy.MakeTableView_management(table, temp_table_view)
-
     expression = "COUNTYNAME = '%s'" % county_name_in_att_table
-
-    # Execute SelectLayerByAttribute to determine which rows to delete
+    # Execute SelectLayerByAttribute to see if there are any rows in the requirements table with this county name.
     arcpy.SelectLayerByAttribute_management(temp_table_view, "NEW_SELECTION", expression)
 
     if int(arcpy.GetCount_management(temp_table_view)[0]) > 0:
-        print "\nThere were rows in the dev team requirements table for this county (%s) from a previous run. Deleting..." % county_name_in_att_table
-        arcpy.DeleteRows_management(temp_table_view)
-
+        print "There were rows in the dev team table for this county (%s) from a previous run. Deleting..." % county_name_in_att_table
+        with arcpy.da.UpdateCursor(table, "COUNTYNAME") as uc:
+            for row in uc:
+                if row[0] == county_name_in_att_table:
+                    uc.deleteRow()
 
 def calculate_requirements(requirements_to_process=requirements.keys()):
 
@@ -1182,5 +1241,5 @@ end_time = datetime.datetime.now()
 duration = end_time - start_time
 
 print("Start Time: " + str(start_time))
-print("End Time: " + str(end_time)        )
+print("End Time: " + str(end_time))
 print("Duration: " + str(duration))
