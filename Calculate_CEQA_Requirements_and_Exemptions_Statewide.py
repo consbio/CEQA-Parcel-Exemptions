@@ -117,7 +117,7 @@ input_parcels_fc_list = "*"
     #"VENTURA_Parcels",
     #"YOLO_Parcels",
     #"YUBA_Parcels",
-]
+#]
 
 # Workspaces
 input_parcels_gdb = r"P:\Projects3\CDT-CEQA_California_2019_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Parcels_Projected_Delete_Identical.gdb"
