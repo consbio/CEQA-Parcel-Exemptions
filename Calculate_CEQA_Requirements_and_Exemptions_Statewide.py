@@ -351,7 +351,7 @@ requirements_with_no_data = {
 }
 
 
-# 03/12/2020 Feb 18 version of Criteria Spreadsheet. Includes updates from Helen as well as the addition of the species requirement (8.5). Includes 3.9 -3.14 (yellow stuff)
+# 04/06/2023 March 6 2023 version of Criteria Spreadsheet. Requirement 3.6 was added back in.
 exemptions = {
     "21159.24": ["2.1", "3.1", "8.1", "8.2", "8.3", "8.5", "9.2", "9.3", "9.4", "9.5", "9.6"],
     "21155.1": ["2.5", ["3.2", "3.13", "3.14"], "8.1", "8.2", "8.3", "8.5", "9.2", "9.3", "9.4", "9.5"],
