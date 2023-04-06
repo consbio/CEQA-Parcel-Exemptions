@@ -2,7 +2,6 @@
 # Script: Calculate CEQA Requirements and Exemptions (Statewide Implementation)
 # Author: Mike Gough
 # Date created: 03/17/2020
-# Date last modified: 04/03/2023
 # Python Version: 2.7
 # Description: This script calculates CEQA requirements & exemptions for parcels in the state of California.
 # Requirement calculations are based on the spatial relationships each parcel has with other spatial datasets
