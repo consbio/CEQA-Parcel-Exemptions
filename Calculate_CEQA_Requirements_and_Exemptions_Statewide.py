@@ -1067,7 +1067,7 @@ def calculate_exemptions(exemptions_to_calculate=exemptions.keys()):
 # TABLES FOR DEV TEAM ##################################################################################################
 
 def create_requirements_table_dev_team():
-    """ Creates the requirements table & adds the exemptions_count field"""
+    """ Creates the requirements table """
 
     if arcpy.Exists(output_parcels_fc):
         existing_output_fields = [field.name for field in arcpy.ListFields(output_parcels_fc)]
@@ -1077,6 +1077,10 @@ def create_requirements_table_dev_team():
     for field in existing_output_fields:
         if field in requirements.values():
             fields_to_keep.append(field)
+            # Fix for issue where new requirements weren't being added to an existing requirements table because
+            # the schema's dont match when performing the append.
+            if arcpy.Exists(output_requirements_table) and field not in arcpy.ListFields(output_requirements_table):
+                arcpy.AddField_management(output_requirements_table, field, "SHORT")
 
     # create an empty field mapping object
     mapS = arcpy.FieldMappings()
@@ -1086,10 +1090,8 @@ def create_requirements_table_dev_team():
         map.addInputField(output_parcels_fc, field)
         mapS.addFieldMap(map)
 
-    output_table = output_gdb_dev_team + os.sep + output_requirements_table_name
-
     # If no requirements table exists, create it.
-    if not arcpy.Exists(output_table):
+    if not arcpy.Exists(output_requirements_table):
         print "\nCreating Requirements table..."
         arcpy.TableToTable_conversion(
             in_rows=output_parcels_fc,
@@ -1105,7 +1107,7 @@ def create_requirements_table_dev_team():
         #table_view = arcpy.MakeTableView_management(output_parcels_fc)
         arcpy.Append_management(
             inputs=tmp_table,
-            target=output_table,
+            target=output_requirements_table,
             schema_type="NO_TEST",
             field_mapping=mapS,
             subtype="")
@@ -1129,6 +1131,9 @@ def create_exemptions_table_dev_team():
     for field in existing_output_fields:
         if field in exemption_fields:
             fields_to_keep.append(field)
+            if arcpy.Exists(output_exemptions_table) and field not in arcpy.ListFields(output_exemptions_table):
+                arcpy.AddField_management(output_exemptions_table, field, "SHORT")
+
     fields_to_keep.append("exemptions_count")
 
     # create an empty field mapping object
@@ -1139,10 +1144,8 @@ def create_exemptions_table_dev_team():
         map.addInputField(output_parcels_fc, field)
         mapS.addFieldMap(map)
 
-    output_table = output_gdb_dev_team + os.sep + output_exemptions_table_name
-
     # If no requirements table exists, create it.
-    if not arcpy.Exists(output_table):
+    if not arcpy.Exists(output_exemptions_table):
         print "\nCreating Exemptions table..."
         arcpy.TableToTable_conversion(
             in_rows=output_parcels_fc,
@@ -1157,7 +1160,7 @@ def create_exemptions_table_dev_team():
         arcpy.CopyRows_management(output_parcels_fc, tmp_table)
         arcpy.Append_management(
             inputs=tmp_table,
-            target=output_table,
+            target=output_exemptions_table,
             schema_type="NO_TEST",
             field_mapping=mapS,
             subtype="")
@@ -1194,11 +1197,19 @@ if requirements_to_process == "*":
 
 arcpy.env.workspace = output_gdb_dev_team
 
+output_requirements_table = output_gdb_dev_team + os.sep + output_requirements_table_name
+output_exemptions_table = output_gdb_dev_team + os.sep + output_exemptions_table_name
+
+if input_parcels_fc_list == "*" and arcpy.Exists(output_requirements_table):
+    print "Note: If processing requirements for all counties, manually deleting the requirements table first is recommended since all records in this table will be deleted. This will increase performance"
+
+if input_parcels_fc_list == "*" and arcpy.Exists(output_exemptions_table):
+    print "Note: If processing exemptions for all counties, manually deleting the exemptions table first is recommended since all records in this table will be deleted. This will increase performance"
+
 # For each parcel in the user defined list....
 for input_parcels_fc_name in input_parcels_fc_list:
 
     print "\nProcessing parcels: " + input_parcels_fc_name
-
     # Get the path to the county parcels.
     input_parcels_fc = input_parcels_gdb + os.sep + input_parcels_fc_name
 
