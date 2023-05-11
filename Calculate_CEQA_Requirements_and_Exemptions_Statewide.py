@@ -382,6 +382,7 @@ def delete_county_rows_from_dev_table(output_parcels_fc, table):
                 if row[0] == county_name_in_att_table:
                     uc.deleteRow()
 
+
 def calculate_requirements(requirements_to_process=requirements.keys()):
 
     county_name = os.path.basename(output_parcels_fc).split("_")[0].lower()
@@ -1024,7 +1025,9 @@ def calculate_exemptions(exemptions_to_calculate=exemptions.keys()):
     if arcpy.Exists(output_exemptions_table_dev_team):
         delete_county_rows_from_dev_table(output_parcels_fc, output_exemptions_table_dev_team)
 
+
 # TABLES FOR DEV TEAM ##################################################################################################
+
 
 def create_requirements_table_dev_team():
     """ Creates the requirements table """
