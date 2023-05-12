@@ -26,7 +26,6 @@ def rename_fields():
     start = datetime.datetime.now()
     print("Start: " + str(start))
 
-
     field_changes = [
         ["fips", "FIPS_CODE"],
         ["county_name", "COUNTYNAME"],
@@ -50,5 +49,5 @@ def rename_fields():
                 to_field = field_change[1]
                 arcpy.AlterField_management(fc_or_table, from_field, to_field)
 
-rename_fields()
 
+rename_fields()
