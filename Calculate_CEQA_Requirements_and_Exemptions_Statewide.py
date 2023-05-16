@@ -34,18 +34,8 @@
 
 # Similarly, if processing exemptions for all counties, manually delete exemptions table first since all records in this
 # table will be deleted. This will increase performance.
-########################################################################################################################
 
-import os
-import arcpy
-import datetime
-arcpy.env.overwriteOutput = True
-arcpy.CheckOutExtension("Spatial")
-
-appdata_dir = os.environ.get("APPDATA")
-favorites_dir = appdata_dir + "\Esri\ArcGISPro\Favorites"
-
-# Indicate the parcel feature classes to process.
+# Indicating the parcel feature classes to process:
 # Use "*" to process all counties, or create a list of counties to process. Examples:
 # input_parcels_fc_list = "*"
 # input_parcels_fc_list = ["SANBENITO_Parcels", "SANBERNARDINO_Parcels"].
@@ -56,6 +46,16 @@ favorites_dir = appdata_dir + "\Esri\ArcGISPro\Favorites"
 # requirements_to_process = "*"
 # requirements_to_process = ["3.10", "2.6"].
 # For one requirement, also use a list. For example, ["3.10"]
+########################################################################################################################
+
+import os
+import arcpy
+import datetime
+arcpy.env.overwriteOutput = True
+arcpy.CheckOutExtension("Spatial")
+
+appdata_dir = os.environ.get("APPDATA")
+favorites_dir = appdata_dir + "\Esri\ArcGISPro\Favorites"
 
 ########################################### CEQA Phase 2.0 Runs ########################################################
 
@@ -324,7 +324,6 @@ exemptions = {
     #"15064.3": [["3.1", "3.5"]] # Remove 3.6 and 3.7
      "15064.3": [["3.1", "3.5", "3.6"]] # Add 3.6 back in. We have 3.6 for CEQA Site Check version 2.0
 }
-
 
 # DATA PROCESSING FUNCTIONS ############################################################################################
 
