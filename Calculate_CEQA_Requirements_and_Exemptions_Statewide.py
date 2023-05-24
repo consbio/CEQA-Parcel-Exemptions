@@ -65,8 +65,18 @@ requirements_to_process = ["3.6", "3.8"]
 input_parcels_fc_list = "*"
 
 # 05/04/23 Run #2
-# Notes: Uses new parcels data (Statewide ec9dc5c9-e485-11ed-8586-c45ab1d6625e, separated into counties)
+# Notes: Uses new parcels data (Statewide ec9dc5c9-e485-11ed-8586-c45ab1d6625e, separated into counties).
 requirements_to_process = "*"
+input_parcels_fc_list = "*"
+
+# 05/18/23 Run #3
+# Notes: Updates to Specific Plan, VMT, and HQTC data (from Justin Heyerdahl).
+requirements_to_process = ["2.6", "3.2", "3.4", "3.5", "3.6", "3.8"]
+input_parcels_fc_list = "*"
+
+# 05/23/203 Run #4
+# Notes: Updates to VMT data and new path to specific plan data (from Justin Heyerdahl).
+requirements_to_process = ["2.6", "3.6", "3.8"]
 input_parcels_fc_list = "*"
 
 ########################################################################################################################
@@ -80,7 +90,8 @@ scratch_ws = "P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQ
 
 # Toolbox containing models for processing additional requirements (from Charlotte Smith).
 # Updated Toolbox for version 2.0. Provided by Charlotte on 3/08/2023
-statewide_toolbox = r"\\loxodonta\GIS\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_charlotte_smith\Tasks\CEQA_revisions_2023_03\Tools\Models\Statewide_2023_v2_0.tbx"
+#statewide_toolbox = r"\\loxodonta\GIS\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_charlotte_smith\Tasks\CEQA_revisions_2023_03\Tools\Models\Statewide_2023_v2_0.tbx"
+statewide_toolbox = r"\\loxodonta\GIS\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Tools\Models\Statewide_2023_v2_1.tbx"
 statewide_toolbox_alias = "Statewide"
 arcpy.ImportToolbox(statewide_toolbox, statewide_toolbox_alias)
 
