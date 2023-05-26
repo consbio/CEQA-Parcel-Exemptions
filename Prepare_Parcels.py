@@ -397,7 +397,7 @@ def separate_into_counties(input_fc):
 #calc_zip_codes()
 #join_mpo_name(input_fc=statewide_parcels_input_fc_with_zip)
 #join_specific_plan_name(input_fc=statewide_parcels_input_fc_with_zip_mpo)
-join_zoning_designations(input_fc=test_parcels, threshold=10)
+join_zoning_designations(input_fc=test_parcels, threshold=20)
 
 #clean_up_fields(input_fc=statewide_parcels_input_fc_with_zip_mpo_sp, ["Shape_Length_1", "Shape_Area_1", "Join_Count", "TARGET_FID", "Join_Count_1", "TARGET_FID_1"])
 #separate_into_counties(input_fc=statewide_parcels_input_fc_with_zip_mpo_sp)
