@@ -395,13 +395,12 @@ def separate_into_counties(input_fc):
 #project_and_delete_dups()
 #add_and_calculate_fields()
 #calc_zip_codes()
-#join_mpo_name(statewide_parcels_input_fc_with_zip)
-#join_specific_plan_name(statewide_parcels_input_fc_with_zip_mpo)
-#join_zoning_designation_gt_threshold(test_parcels, 80)
+#join_mpo_name(input_fc=statewide_parcels_input_fc_with_zip)
+#join_specific_plan_name(input_fc=statewide_parcels_input_fc_with_zip_mpo)
 join_zoning_designations(input_fc=test_parcels, threshold=10)
 
-#clean_up_fields(statewide_parcels_input_fc_with_zip_mpo_sp, ["Shape_Length_1", "Shape_Area_1", "Join_Count", "TARGET_FID", "Join_Count_1", "TARGET_FID_1"])
-#separate_into_counties(statewide_parcels_input_fc_with_zip_mpo_sp)
+#clean_up_fields(input_fc=statewide_parcels_input_fc_with_zip_mpo_sp, ["Shape_Length_1", "Shape_Area_1", "Join_Count", "TARGET_FID", "Join_Count_1", "TARGET_FID_1"])
+#separate_into_counties(input_fc=statewide_parcels_input_fc_with_zip_mpo_sp)
 
 end_script = datetime.datetime.now()
 print("\nEnd Script: " + str(end_script))
