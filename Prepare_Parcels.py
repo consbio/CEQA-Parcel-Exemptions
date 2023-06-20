@@ -279,7 +279,7 @@ def join_zoning_designations(input_fc, threshold):
         print("Tabulation table already exists.")
 
     # Note: Creating a query table of records > threshold and joining to input fc took took too long.
-    print("Creating a dictionary of parcel_id: {zoning_designation='', percent_cover = ''} where pecent_cover is > " + str(threshold))
+    print("Creating a dictionary of parcel_id: {zoning_designation='', percent_cover = ''} where pecent_cover is >= " + str(threshold))
     zoning_dict = {}
     with arcpy.da.SearchCursor(tabulate_intersection_table, [cbi_parcel_id_field, zoning_field, "PERCENTAGE"]) as sc:
         for row in sc:
