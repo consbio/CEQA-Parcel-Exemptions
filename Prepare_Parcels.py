@@ -19,6 +19,7 @@
 import arcpy
 import os
 import datetime
+import json
 
 arcpy.env.overwriteOutput = True
 
@@ -35,11 +36,13 @@ zoning_source_fc = r"\\loxodonta\gis\Source_Data\planningCadastre\state\CA\Zonin
 tmp_gdb = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Scratch\Scratch.gdb"
 input_gdb = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Inputs.gdb"
 
-test_parcels = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Test_Parcels\Test_Parcels.gdb\ALAMEDA_Parcels"
+#test_parcels = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Test_Parcels\Test_Parcels.gdb\ALAMEDA_Parcels_Explode_Subset_3"
+test_parcels = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Test_Parcels\Test_Parcels.gdb\ALAMEDA_Parcels_Explode_Zoning_Field_Description"
 
 # Field Names:
 cbi_parcel_id_field = "cbi_parcel_id_fips_apn_oid"
-zoning_field = "ucd_description" # The field in the zoning dataset that contains the zoning designation.
+#zoning_field = "ucd_description"  # The field in the zoning dataset that contains the zoning designation.
+zoning_field = "description"  # The field in the zoning dataset that contains the zoning designation.
 
 # Output Parameters:
 output_gdb = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Parcels\Parcels_Prepared_By_County.gdb"
@@ -236,6 +239,7 @@ def join_zoning_designations(input_fc, threshold):
     """ Joins the Zoning Designation to each parcel based on the % coverage threshold. """
 
     print("Performing Zoning Data Calculations...")
+    fields = [field.name for field in arcpy.ListFields(input_fc)]
 
     separate_fields = False  # indicates whether zoning designation and % cover should go in separate fields or not.
 
@@ -267,19 +271,16 @@ def join_zoning_designations(input_fc, threshold):
     tabulate_intersection_table_name = "Tabulate_Zoning_Intersection"
     tabulate_intersection_table = tmp_gdb + os.sep + tabulate_intersection_table_name
 
-    if not arcpy.Exists(tabulate_intersection_table):
-        print("Tabulating Intersection (% zoning designation within each parcel)...")
-        arcpy.TabulateIntersection_analysis(
-            in_zone_features=input_fc,
-            zone_fields=cbi_parcel_id_field,
-            in_class_features=zoning_projected,
-            out_table=tabulate_intersection_table,
-            class_fields=zoning_field, sum_fields="", xy_tolerance="-1 Unknown", out_units="UNKNOWN")
-    else:
-        print("Tabulation table already exists.")
+    print("Tabulating Intersection (% zoning designation within each parcel)...")
+    arcpy.TabulateIntersection_analysis(
+        in_zone_features=input_fc,
+        zone_fields=cbi_parcel_id_field,
+        in_class_features=zoning_projected,
+        out_table=tabulate_intersection_table,
+        class_fields=zoning_field, sum_fields="", xy_tolerance="")
 
     # Note: Creating a query table of records > threshold and joining to input fc took took too long.
-    print("Creating a dictionary of parcel_id: {zoning_designation='', percent_cover = ''} where pecent_cover is >= " + str(threshold))
+    print("Creating a dictionary of parcel_id: {zoning_designation='', percent_cover = ''} where percent_cover is >= " + str(threshold))
     zoning_dict = {}
     with arcpy.da.SearchCursor(tabulate_intersection_table, [cbi_parcel_id_field, zoning_field, "PERCENTAGE"]) as sc:
         for row in sc:
@@ -289,12 +290,21 @@ def join_zoning_designations(input_fc, threshold):
             if percent_cover >= threshold:
                 if parcel_id not in zoning_dict:
                     zoning_dict[parcel_id] = {}
-                zoning_dict[parcel_id][zoning_designation] = percent_cover
+                    zoning_dict[parcel_id]["zoning_designations"] = {}
+                    zoning_dict[parcel_id]["count"] = 0
+                zoning_dict[parcel_id]["zoning_designations"][zoning_designation] = percent_cover
+                zoning_dict[parcel_id]["count"] += 1
 
     # Delete and add fields each run in case zoning data changes (don't want residual values).
     print("Adding Zoning_Designation field...")
-    arcpy.DeleteField_management(input_fc, "Zoning_Designation")
+    if "Zoning_Designation" in fields:
+        arcpy.DeleteField_management(input_fc, "Zoning_Designation")
     arcpy.AddField_management(input_fc, "Zoning_Designation", "TEXT")
+
+    if "Zoning_Designation_Count" in fields:
+        arcpy.DeleteField_management(input_fc, "Zoning_Designation_Count")
+    arcpy.AddField_management(input_fc, "Zoning_Designation_Count", "SHORT")
+    arcpy.CalculateField_management(input_fc, "Zoning_Designation_Count", 0)
 
     print("Adding Percent_Cover field...")
     arcpy.DeleteField_management(input_fc, "Zoning_Percent_Cover")
@@ -305,13 +315,14 @@ def join_zoning_designations(input_fc, threshold):
     if separate_fields:
         fields_to_calc = [cbi_parcel_id_field, "Zoning_Designation", "Zoning_Percent_Cover"]
     else:
-        fields_to_calc = [cbi_parcel_id_field, "Zoning_Designation"]
+        fields_to_calc = [cbi_parcel_id_field, "Zoning_Designation", "Zoning_Designation_Count"]
 
     with arcpy.da.UpdateCursor(input_fc, fields_to_calc) as uc:
         for row in uc:
+            row[2] = 0  # Initialize the zoning designation count to 0
             parcel_id = row[0]
             if parcel_id in zoning_dict:
-                print(zoning_dict[parcel_id])
+                #print(zoning_dict[parcel_id])
                 zoning_designations = []
                 percentages = []
                 if separate_fields:
@@ -324,8 +335,9 @@ def join_zoning_designations(input_fc, threshold):
                     row[1] = ",".join(zoning_designations)
                     row[2] = ",".join(percentages)
                 else:
-                    print(zoning_dict[parcel_id])
-                    row[1] = str(zoning_dict[parcel_id])
+                    print(parcel_id + ": " + str(zoning_dict[parcel_id]))
+                    row[1] = json.dumps(zoning_dict[parcel_id]["zoning_designations"])
+                    row[2] = json.dumps(zoning_dict[parcel_id]["count"])
                 uc.updateRow(row)
 
     end = datetime.datetime.now()
