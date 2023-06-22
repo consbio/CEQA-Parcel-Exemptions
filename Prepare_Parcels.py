@@ -8,11 +8,11 @@
 # Performs the following tasks:
 # 1. Projects the statewide parcels dataset and deletes parcels with duplicate geometries.
 # 2. Adds and calculates additional fields needed but not provided (e.g., a unique id).
-# 3. Calculates the zip code for each parcel.
+# 3. Calculates the zip code for each parcel, mpo, specific plan, and zoning designation.
 # 4. Cleans up fields and field names.
 # 5. Separates the state-wide parcels dataset into individual county datasets.
 
-# Total Runtime: ~10.5 hrs
+# Total Runtime: ~18 hrs
 
 ########################################################################################################################
 
@@ -55,7 +55,7 @@ zip_codes_input_fc = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\
 
 output_crs = arcpy.SpatialReference(3310)  # NAD_1983_California_Teale_Albers
 
-
+print("NOTE: the parcels need to be converted from multipart to singlepart, and have the unique ID's recreated.")
 def project_and_delete_dups():
     """ Function to project the state-wide parcels dataset provided by OPR and delete parcels with duplicate
     geometry. ~1hr"""
