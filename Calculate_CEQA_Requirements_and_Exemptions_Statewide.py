@@ -74,7 +74,7 @@ input_parcels_fc_list = "*"
 requirements_to_process = ["2.6", "3.2", "3.4", "3.5", "3.6", "3.8"]
 input_parcels_fc_list = "*"
 
-# 05/23/203 Run #4
+# 05/23/23 Run #4
 # Notes: Updates to VMT data and new path to specific plan data (from Justin Heyerdahl).
 requirements_to_process = ["2.6", "3.6", "3.8"]
 input_parcels_fc_list = "*"
