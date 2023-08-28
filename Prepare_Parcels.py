@@ -30,30 +30,34 @@ print("Start Script: " + str(start_script))
 statewide_parcels_source_fc = r"\\loxodonta\gis\Source_Data\planningCadastre\state\CA\SiteCheck_Parcels_2023\SiteCheck_Parcels.gdb\Statewide_Parcels"
 zip_codes_source_fc = r"\\loxodonta\gis\Source_Data\boundaries\state\CA\Zip_Code_Boundaries\California_Zip_Codes\cfd6f01a-9af0-4ebc-ab36-4d380d185c12.gdb\California_Zip_Codes"
 mpo_source_fc = r"\\loxodonta\gis\Source_Data\boundaries\state\CA\MPO_Boundaries\Metropolitan Planning Organization (MPO), California\data\commondata\metopolitan_planning_organization_mpo\MPO_2013.shp"
+zoning_input_fc = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Zoning\Zoning.gdb\california_zoning_opr_20230809_prepared"
+
 # Justin's project version of specific plans
 specific_plan_source_fc = r"\\loxodonta\gis\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Data\IntermediateData.gdb\NAD83_Projected\req2_6_specificplan_coverage"
-zoning_source_fc = r"\\loxodonta\gis\Source_Data\planningCadastre\state\CA\Zoning\From_Mark_Hedlund_OPR\20230522\export.gdb\Lat_long\CaliforniaZoning"
+
 tmp_gdb = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Scratch\Scratch.gdb"
 input_gdb = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Inputs.gdb"
 
 #test_parcels = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Test_Parcels\Test_Parcels.gdb\ALAMEDA_Parcels_Explode_Subset_3"
-test_parcels = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Test_Parcels\Test_Parcels.gdb\ALAMEDA_Parcels_Explode_Zoning_Field_Description"
+#test_parcels = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Test_Parcels\Test_Parcels.gdb\ALAMEDA_Parcels_Explode_Zoning_Field_Description"
 
 # Field Names:
 cbi_parcel_id_field = "cbi_parcel_id_fips_apn_oid"
 #zoning_field = "ucd_description"  # The field in the zoning dataset that contains the zoning designation.
-zoning_field = "description"  # The field in the zoning dataset that contains the zoning designation.
+#zoning_field = "description"  # The field in the zoning dataset that contains the zoning designation.
+zoning_field = "Code"  # Mark instructed us to use this field on 08/28/2023
 
 # Output Parameters:
 output_gdb = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Parcels\Parcels_Prepared_By_County.gdb"
-statewide_parcels_input_fc = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Parcels\Parcels_Projected_Delete_Identical.gdb\Statewide_Parcels_Proj_No_Dups"
+statewide_parcels_input_fc_multipart = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Parcels\Parcels_Projected_Delete_Identical.gdb\Statewide_Parcels_Proj_No_Dups_Multipart"
+statewide_parcels_input_fc = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Parcels\Parcels_Projected_Delete_Identical.gdb\Statewide_Parcels_Proj_No_Dups_Singlepart"
 statewide_parcels_input_fc_with_zip = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Parcels\Parcels_Projected_Delete_Identical.gdb\Statewide_Parcels_With_Zip"
 statewide_parcels_input_fc_with_zip_mpo = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Parcels\Parcels_Projected_Delete_Identical.gdb\Statewide_Parcels_With_Zip_MPO"
 statewide_parcels_input_fc_with_zip_mpo_sp = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Parcels\Parcels_Projected_Delete_Identical.gdb\Statewide_Parcels_With_Zip_MPO_SP"
 statewide_parcels_input_fc_with_zip_mpo_sp_zoning = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Parcels\Parcels_Projected_Delete_Identical.gdb\Statewide_Parcels_With_Zip_MPO_SP_Zoning"
 zip_codes_input_fc = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Inputs.gdb\California_Zip_Codes_Projected"
 
-output_crs = arcpy.SpatialReference(3310)  # NAD_1983_California_Teale_Albers
+output_crs = arcpy.SpatialReference("NAD_1983_California_Teale_Albers")
 
 print("NOTE: the parcels need to be converted from multipart to singlepart, and have the unique ID's recreated.")
 def project_and_delete_dups():
@@ -67,7 +71,7 @@ def project_and_delete_dups():
 
     print("\nProjecting...")
 
-    input_crs = arcpy.Describe(zoning_source_fc).SpatialReference
+    input_crs = arcpy.Describe(statewide_parcels_source_fc).SpatialReference
     datum = input_crs.gcs.name
     if datum == "GCS_North_American_1983":
         datum_transformation = "WGS_1984_(ITRF00)_To_NAD_1983"
@@ -76,7 +80,7 @@ def project_and_delete_dups():
 
     arcpy.Project_management(
         in_dataset=statewide_parcels_source_fc,
-        out_dataset=statewide_parcels_input_fc,
+        out_dataset=statewide_parcels_input_fc_multipart,
         out_coor_system=output_crs,
         transform_method=datum_transformation,
         in_coor_system=input_crs,
@@ -98,6 +102,14 @@ def project_and_delete_dups():
     print("\nEnd: " + str(end))
     duration = end - start
     print("Duration: " + str(duration))
+
+
+def explode():
+    """ Function to explode multi-part features in the parcels dataset into single part features. """
+
+    print("\nConverting Multpart to Singlpart...\n")
+
+    arcpy.MultipartToSinglepart_management(statewide_parcels_input_fc_multipart, statewide_parcels_input_fc)
 
 
 def add_and_calculate_fields():
@@ -246,27 +258,11 @@ def join_zoning_designations(input_fc, threshold):
     start = datetime.datetime.now()
     print("Start: " + str(start))
 
-    zoning_projected = input_gdb + os.sep + "California_Zoning_Projected"
-
-    if not arcpy.Exists(zoning_projected):
-        print("Projecting zoning data....")
-
-        input_crs = arcpy.Describe(zoning_source_fc).SpatialReference
-        datum = input_crs.gcs.name
-        if datum == "GCS_North_American_1983":
-            datum_transformation = "WGS_1984_(ITRF00)_To_NAD_1983"
-        else:
-            datum_transformation = ""
-
-        arcpy.Project_management(
-            in_dataset=zoning_source_fc,
-            out_dataset=zoning_projected,
-            out_coor_system=output_crs,
-            transform_method=datum_transformation,
-            in_coor_system=input_crs,
-            preserve_shape="NO_PRESERVE_SHAPE", max_deviation="", vertical="NO_VERTICAL")
-    else:
-        print("Zoning data has already been projected.")
+    #print("Repairing Geometry...")
+    # Repairing geometry on the parcels data did not eliminate the topology error (ERROR 160196: Invalid Topology).
+    # The problem may be with the zoning data though. Repair geometry was performed on the zoning data
+    # in the Prepare_Zoning.py script on 08/18/2023 @ 7:20am
+    #arcpy.RepairGeometry_management(input_fc)
 
     tabulate_intersection_table_name = "Tabulate_Zoning_Intersection"
     tabulate_intersection_table = tmp_gdb + os.sep + tabulate_intersection_table_name
@@ -275,7 +271,7 @@ def join_zoning_designations(input_fc, threshold):
     arcpy.TabulateIntersection_analysis(
         in_zone_features=input_fc,
         zone_fields=cbi_parcel_id_field,
-        in_class_features=zoning_projected,
+        in_class_features=zoning_input_fc,
         out_table=tabulate_intersection_table,
         class_fields=zoning_field, sum_fields="", xy_tolerance="")
 
@@ -296,29 +292,34 @@ def join_zoning_designations(input_fc, threshold):
                 zoning_dict[parcel_id]["count"] += 1
 
     # Delete and add fields each run in case zoning data changes (don't want residual values).
-    print("Adding Zoning_Designation field...")
+    print("Deleting and Adding Zoning Designation fields...")
+
+    print("Zoning_Designation...")
     if "Zoning_Designation" in fields:
         arcpy.DeleteField_management(input_fc, "Zoning_Designation")
-    arcpy.AddField_management(input_fc, "Zoning_Designation", "TEXT")
+    arcpy.AddField_management(input_fc, "Zoning_Designation", "TEXT", field_length=500)
 
+    print("Zoning_Designation_Count...")
     if "Zoning_Designation_Count" in fields:
         arcpy.DeleteField_management(input_fc, "Zoning_Designation_Count")
     arcpy.AddField_management(input_fc, "Zoning_Designation_Count", "SHORT")
     arcpy.CalculateField_management(input_fc, "Zoning_Designation_Count", 0)
 
-    print("Adding Percent_Cover field...")
+    print("Percent_Cover...")
     arcpy.DeleteField_management(input_fc, "Zoning_Percent_Cover")
     if separate_fields:
         arcpy.AddField_management(input_fc, "Zoning_Percent_Cover", "TEXT")
 
-    print("Getting zoning designation and percent cover values for each parcel...")
     if separate_fields:
         fields_to_calc = [cbi_parcel_id_field, "Zoning_Designation", "Zoning_Percent_Cover"]
     else:
         fields_to_calc = [cbi_parcel_id_field, "Zoning_Designation", "Zoning_Designation_Count"]
 
+    count = 0
+    print("Running update cursor to add zoning designations from dictionary to to parcels data...")
     with arcpy.da.UpdateCursor(input_fc, fields_to_calc) as uc:
         for row in uc:
+            print(count)
             row[2] = 0  # Initialize the zoning designation count to 0
             parcel_id = row[0]
             if parcel_id in zoning_dict:
@@ -339,6 +340,7 @@ def join_zoning_designations(input_fc, threshold):
                     row[1] = json.dumps(zoning_dict[parcel_id]["zoning_designations"])
                     row[2] = json.dumps(zoning_dict[parcel_id]["count"])
                 uc.updateRow(row)
+            count += 1
 
     end = datetime.datetime.now()
     print("\nEnd: " + str(end))
@@ -404,15 +406,14 @@ def separate_into_counties(input_fc):
     duration = end - start
     print("Duration: " + str(duration))
 
-#project_and_delete_dups()
-#add_and_calculate_fields()
-#calc_zip_codes()
-#join_mpo_name(input_fc=statewide_parcels_input_fc_with_zip)
-#join_specific_plan_name(input_fc=statewide_parcels_input_fc_with_zip_mpo)
-join_zoning_designations(input_fc=test_parcels, threshold=20)
-
-#clean_up_fields(input_fc=statewide_parcels_input_fc_with_zip_mpo_sp, ["Shape_Length_1", "Shape_Area_1", "Join_Count", "TARGET_FID", "Join_Count_1", "TARGET_FID_1"])
-#separate_into_counties(input_fc=statewide_parcels_input_fc_with_zip_mpo_sp)
+project_and_delete_dups()
+explode()
+add_and_calculate_fields()
+calc_zip_codes()
+join_mpo_name(input_fc=statewide_parcels_input_fc_with_zip)
+join_zoning_designations(input_fc=statewide_parcels_input_fc_with_zip_mpo_sp, threshold=20)
+clean_up_fields(input_fc=statewide_parcels_input_fc_with_zip_mpo_sp, fields_to_delete=["Shape_Length_1", "Shape_Area_1", "Join_Count", "TARGET_FID", "Join_Count_1", "Join_Count_12", "TARGET_FID_1", "TARGET_FID_12"])
+separate_into_counties(input_fc=statewide_parcels_input_fc_with_zip_mpo_sp)
 
 end_script = datetime.datetime.now()
 print("\nEnd Script: " + str(end_script))
