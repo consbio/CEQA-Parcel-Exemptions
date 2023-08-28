@@ -146,7 +146,7 @@ mpo_boundary_dissolve_fc = r"P:\Projects3\CDT-CEQA_California_2019_mike_gough\Ta
 urbanized_area_urban_cluster_fc = r"P:\Projects3\CDT-CEQA_California_2019_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Inputs.gdb\CA_urbanized_area_urban_cluster"
 
 # 8.5
-rare_threatened_or_endangered_fc = favorites_dir + r"\CBI Intermediate.sde\cbiintermediate.mike_gough.CA_Rare_Threatened_or_Endangered_Erase_Impervious_del_fields"
+rare_threatened_or_endangered_fc = favorites_dir + r"\CBI Intermediate.sde\cbiintermediate.mike_gough.CA_Rare_Threatened_or_Endangered_Erase_Impervious_del_fields_23"
 
 # 8.6
 prime_farmlands_fc = r"\\loxodonta\gis\Source_Data\farming\state\CA\FMMP\2018_2016_from_Data_Basin\California - Farmland Mapping and Monitoring Program (FMMP), 2018_2016\data\commondata\2018_in_progress_fmmp_shape_files\CA_FMMP_2018_state.shp"
