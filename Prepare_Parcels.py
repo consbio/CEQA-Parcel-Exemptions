@@ -7,10 +7,11 @@
 # Prepares parcels for the Requirements and Exemptions Script.
 # Performs the following tasks:
 # 1. Projects the statewide parcels dataset and deletes parcels with duplicate geometries.
-# 2. Adds and calculates additional fields needed but not provided (e.g., a unique id).
-# 3. Calculates the zip code for each parcel, mpo, specific plan, and zoning designation.
-# 4. Cleans up fields and field names.
-# 5. Separates the state-wide parcels dataset into individual county datasets.
+# 2. Explodes multi-part features into single-part features.
+# 3. Adds and calculates additional fields needed but not provided (e.g., a unique id).
+# 4. Calculates the zip code for each parcel, mpo, specific plan, and zoning designation(s).
+# 5. Cleans up fields and field names.
+# 6. Separates the state-wide parcels dataset into individual county datasets.
 
 # Total Runtime: ~18 hrs
 
@@ -405,6 +406,7 @@ def separate_into_counties(input_fc):
     print("\nEnd: " + str(end))
     duration = end - start
     print("Duration: " + str(duration))
+
 
 project_and_delete_dups()
 explode()
