@@ -126,18 +126,36 @@ parcel_id_field = "cbi_parcel_id_fips_apn_oid"
 county_name_field = "county_name"
 
 # Datasets used in calculating requirements:
+######################################## CEQA version 1.0 2021 Cities ##################################################
 # 0.1, 2.1
-urbanized_area_prc_21071_fc = r"P:\Projects3\CEQA_Site_Check_Version_1_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Intermediate.gdb\urbanized_area_prc_21071_v1_0"
+#urbanized_area_prc_21071_fc = r"P:\Projects3\CEQA_Site_Check_Version_1_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Intermediate.gdb\urbanized_area_prc_21071_v1_0"
 
 # 2.2
-urban_area_prc_21094_5_fc = r"P:\Projects3\CEQA_Site_Check_Version_1_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Intermediate.gdb\urban_area_prc_21094_5_v1_0"
+#urban_area_prc_21094_5_fc = r"P:\Projects3\CEQA_Site_Check_Version_1_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Intermediate.gdb\urban_area_prc_21094_5_v1_0"
 
 # 0.1, 2.3
-city_boundaries_fc = r"\\loxodonta\GIS\Source_Data\boundaries\state\CA\California_Incorporated_Cities\incorp21_2.shp"
-unincorporated_islands = r"P:\Projects3\CEQA_Site_Check_Version_1_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Intermediate.gdb\Unincorporated_Islands_CALFIRE_2021_with_Population_Dissolve" #2.2
+#city_boundaries_fc = r"\\loxodonta\GIS\Source_Data\boundaries\state\CA\California_Incorporated_Cities\incorp21_2.shp"
+#unincorporated_islands = r"P:\Projects3\CEQA_Site_Check_Version_1_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Intermediate.gdb\Unincorporated_Islands_CALFIRE_2021_with_Population_Dissolve" #2.2
 
 # 2.4 # Select within incorporated cities, then switch the selection
-incorporated_place_fc = r"\\loxodonta\GIS\Source_Data\boundaries\state\CA\California_Incorporated_Cities\incorp21_2.shp"
+#incorporated_place_fc = r"\\loxodonta\GIS\Source_Data\boundaries\state\CA\California_Incorporated_Cities\incorp21_2.shp"
+
+######################################## CEQA version 2.0 2023 Cities ##################################################
+
+# 0.1, 2.1
+urbanized_area_prc_21071_fc = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Intermediate.gdb\urbanized_area_prc_21071_v2_0"
+
+# 2.2
+urban_area_prc_21094_5_fc = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Intermediate.gdb\urbanized_area_prc_21071_v2_0"
+
+# 0.1, 2.3
+city_boundaries_fc = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Source\California_Incorporated_Cities_2023\_ags_dataB9A2584E098B4442A45D05AF49BC3B0C.gdb\incorp23_1"
+unincorporated_islands = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Intermediate.gdb\Unincorporated_Islands_CALFIRE_2023_with_Population_Dissolve" #2.2
+
+# 2.4 # Select within incorporated cities, then switch the selection
+incorporated_place_fc = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Source\California_Incorporated_Cities_2023\_ags_dataB9A2584E098B4442A45D05AF49BC3B0C.gdb\incorp23_1"
+
+########################################################################################################################
 
 # 2.5
 mpo_boundary_dissolve_fc = r"P:\Projects3\CDT-CEQA_California_2019_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Intermediate.gdb\MPO_boundaries_dissolve"
