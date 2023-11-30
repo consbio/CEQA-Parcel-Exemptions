@@ -31,7 +31,9 @@ print("Start Script: " + str(start_script))
 statewide_parcels_source_fc = r"\\loxodonta\gis\Source_Data\planningCadastre\state\CA\SiteCheck_Parcels_2023\SiteCheck_Parcels.gdb\Statewide_Parcels"
 zip_codes_source_fc = r"\\loxodonta\gis\Source_Data\boundaries\state\CA\Zip_Code_Boundaries\California_Zip_Codes\cfd6f01a-9af0-4ebc-ab36-4d380d185c12.gdb\California_Zip_Codes"
 mpo_source_fc = r"\\loxodonta\gis\Source_Data\boundaries\state\CA\MPO_Boundaries\Metropolitan Planning Organization (MPO), California\data\commondata\metopolitan_planning_organization_mpo\MPO_2013.shp"
-zoning_input_fc = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Zoning\Zoning.gdb\california_zoning_opr_20230809_prepared"
+zoning_input_fc = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Zoning\Zoning.gdb\california_zoning_opr_20230921_prepared"
+zip_codes_input_fc = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Inputs.gdb\California_Zip_Codes_Projected"
+census_block_source_fc = r"\\loxodonta\gis\Source_Data\society\state\CA\Census\2022\tl_2022_06_tabblock20\tl_2022_06_tabblock20.shp"
 
 # Justin's project version of specific plans
 specific_plan_source_fc = r"\\loxodonta\gis\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Data\IntermediateData.gdb\NAD83_Projected\req2_6_specificplan_coverage"
@@ -55,12 +57,12 @@ statewide_parcels_input_fc = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mik
 statewide_parcels_input_fc_with_zip = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Parcels\Parcels_Projected_Delete_Identical.gdb\Statewide_Parcels_With_Zip"
 statewide_parcels_input_fc_with_zip_mpo = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Parcels\Parcels_Projected_Delete_Identical.gdb\Statewide_Parcels_With_Zip_MPO"
 statewide_parcels_input_fc_with_zip_mpo_sp = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Parcels\Parcels_Projected_Delete_Identical.gdb\Statewide_Parcels_With_Zip_MPO_SP"
-statewide_parcels_input_fc_with_zip_mpo_sp_zoning = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Parcels\Parcels_Projected_Delete_Identical.gdb\Statewide_Parcels_With_Zip_MPO_SP_Zoning"
-zip_codes_input_fc = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Inputs.gdb\California_Zip_Codes_Projected"
+#statewide_parcels_input_fc_with_zip_mpo_sp_zoning = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Parcels\Parcels_Projected_Delete_Identical.gdb\Statewide_Parcels_With_Zip_MPO_SP_Zoning"
+statewide_parcels_input_fc_with_zip_mpo_sp_zoning_block = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Parcels\Parcels_Projected_Delete_Identical.gdb\Statewide_Parcels_With_Zip_MPO_SP_Zoning_Block"
+
 
 output_crs = arcpy.SpatialReference("NAD_1983_California_Teale_Albers")
 
-print("NOTE: the parcels need to be converted from multipart to singlepart, and have the unique ID's recreated.")
 def project_and_delete_dups():
     """ Function to project the state-wide parcels dataset provided by OPR and delete parcels with duplicate
     geometry. ~1hr"""
@@ -249,7 +251,7 @@ def join_specific_plan_name(input_fc):
 
 
 def join_zoning_designations(input_fc, threshold):
-    """ Joins the Zoning Designation to each parcel based on the % coverage threshold. """
+    """ Joins the Zoning Designation to each parcel based on the % coverage threshold. ~6 days 14 hours"""
 
     print("Performing Zoning Data Calculations...")
     fields = [field.name for field in arcpy.ListFields(input_fc)]
@@ -275,8 +277,8 @@ def join_zoning_designations(input_fc, threshold):
         in_class_features=zoning_input_fc,
         out_table=tabulate_intersection_table,
         class_fields=zoning_field, sum_fields="", xy_tolerance="")
-
     # Note: Creating a query table of records > threshold and joining to input fc took took too long.
+    # ~2.5 hours for the remaining code.
     print("Creating a dictionary of parcel_id: {zoning_designation='', percent_cover = ''} where percent_cover is >= " + str(threshold))
     zoning_dict = {}
     with arcpy.da.SearchCursor(tabulate_intersection_table, [cbi_parcel_id_field, zoning_field, "PERCENTAGE"]) as sc:
@@ -349,6 +351,36 @@ def join_zoning_designations(input_fc, threshold):
     print("Duration: " + str(duration))
 
 
+def join_census_block(input_fc):
+    """ Joins the CENSUS Block Name from the TIGER CENSUS Blocks that a parcel falls within. ~1 hour """
+
+    print("Joining CENSUS Block name to parcels...")
+
+    output_fc = statewide_parcels_input_fc_with_zip_mpo_sp_zoning_block
+
+    start = datetime.datetime.now()
+    print("Start: " + str(start))
+
+    arcpy.SpatialJoin_analysis(
+        target_features=input_fc,
+        join_features=census_block_source_fc,
+        out_feature_class=output_fc,
+        join_operation="JOIN_ONE_TO_ONE",
+        join_type="KEEP_ALL",
+        field_mapping=r'fips "fips" true true false 8 Text 0 0,First,#,' + input_fc + ',fips,0,8;county_name "county_name" true true false 32 Text 0 0,First,#,' + input_fc + ',county_name,0,32;fips_apn "fips_apn" true true false 30 Text 0 0,First,#,' + input_fc + ',fips_apn,0,30;apn "apn" true true false 20 Text 0 0,First,#,' + input_fc + ',apn,0,20;apn_d "apn_d" true true false 17 Text 0 0,First,#,' + input_fc + ',apn_d,0,17;s_city "s_city" true true false 50 Text 0 0,First,#,' + input_fc + ',s_city,0,50;s_addr_d "s_addr_d" true true false 52 Text 0 0,First,#,' + input_fc + ',s_addr_d,0,52;cbi_parcel_id_fips_apn_oid "cbi_parcel_id_fips_apn_oid" true true false 255 Text 0 0,First,#,' + input_fc + ',cbi_parcel_id_fips_apn_oid,0,255;state_name "state_name" true true false 255 Text 0 0,First,#,' + input_fc + ',state_name,0,255;latitude "latitude" true true false 8 Double 0 0,First,#,' + input_fc + ',latitude,-1,-1;longitude "longitude" true true false 8 Double 0 0,First,#,' + input_fc + ',longitude,-1,-1;zip_code "Zip Code" true true false 10 Text 0 0,First,#,' + input_fc + ',zip_code,0,10;MPO "MPO" true true false 55 Text 0 0,First,#,' + input_fc + ',MPO,0,55;Label_MPO "Label_MPO" true true false 10 Text 0 0,First,#,' + input_fc + ',Label_MPO,0,10;Specific_Plan "Specific Plan Name" true true false 255 Text 0 0,First,#,' + input_fc + ',Specific_Plan,0,255;Shape_Length "Shape_Length" false true true 8 Double 0 0,First,#,' + input_fc + ',Shape_Length,-1,-1;Shape_Area "Shape_Area" false true true 8 Double 0 0,First,#,' + input_fc + ',Shape_Area,-1,-1;Zoning_Designation "Zoning_Designation" true true false 500 Text 0 0,First,#,' + input_fc + ',Zoning_Designation,0,500;Zoning_Designation_Count "Zoning_Designation_Count" true true false 2 Short 0 0,First,#,' + input_fc + ',Zoning_Designation_Count,-1,-1;NAME20 "NAME20" true true false 10 Text 0 0,First,#,' + census_block_source_fc + ',NAME20,0,10',
+        match_option="HAVE_THEIR_CENTER_IN",
+        search_radius=None,
+        distance_field_name=""
+    )
+
+    arcpy.AlterField_management(output_fc,"NAME20", "Census_Block")
+
+    end = datetime.datetime.now()
+    print("\nEnd: " + str(end))
+    duration = end - start
+    print("Duration: " + str(duration))
+
+
 def clean_up_fields(input_fc, fields_to_delete=None, fields_to_remove_alias=None):
     """ Function to delete extraneous fields and remove aliases from the state-wide dataset. ~8hrs """
 
@@ -408,14 +440,16 @@ def separate_into_counties(input_fc):
     print("Duration: " + str(duration))
 
 
-project_and_delete_dups()
-explode()
-add_and_calculate_fields()
-calc_zip_codes()
-join_mpo_name(input_fc=statewide_parcels_input_fc_with_zip)
-join_zoning_designations(input_fc=statewide_parcels_input_fc_with_zip_mpo_sp, threshold=20)
-clean_up_fields(input_fc=statewide_parcels_input_fc_with_zip_mpo_sp, fields_to_delete=["Shape_Length_1", "Shape_Area_1", "Join_Count", "TARGET_FID", "Join_Count_1", "Join_Count_12", "TARGET_FID_1", "TARGET_FID_12"])
-separate_into_counties(input_fc=statewide_parcels_input_fc_with_zip_mpo_sp)
+#project_and_delete_dups()
+#explode()
+#add_and_calculate_fields()
+#calc_zip_codes()
+#join_mpo_name(input_fc=statewide_parcels_input_fc_with_zip)
+#join_specific_plan_name(input_fc=statewide_parcels_input_fc_with_zip_mpo)
+#join_zoning_designations(input_fc=statewide_parcels_input_fc_with_zip_mpo_sp_zoning_block, threshold=20)
+#join_census_block(input_fc=statewide_parcels_input_fc_with_zip_mpo_sp)
+#clean_up_fields(input_fc=statewide_parcels_input_fc_with_zip_mpo_sp, fields_to_delete=["Shape_Length_1", "Shape_Area_1", "Join_Count", "TARGET_FID", "Join_Count_1", "Join_Count_12", "TARGET_FID_1", "TARGET_FID_12"])
+separate_into_counties(input_fc=statewide_parcels_input_fc_with_zip_mpo_sp_zoning_block)
 
 end_script = datetime.datetime.now()
 print("\nEnd Script: " + str(end_script))
