@@ -25,7 +25,8 @@
 
 # RUNTIME DURATION:
 # ArcGIS Desktop: ~ 1 week (all counties and requirements)
-# ArcGIS Pro: 3 Days 20 hours (all counties and requirements)
+# ArcGIS Pro: 3 Days 20 hours (all counties and requirements without deleting requirements & exemptions tables).
+# ~5 days if parcels change and those need to be recreated.
 # NOTE If running from ArcGIS Desktop, the script begins to slow down over time. To increase the speed, run 50% of
 # counties at a time, or kill the script after it has completed a county and restart it on the remaining counties.
 
@@ -79,6 +80,19 @@ input_parcels_fc_list = "*"
 requirements_to_process = ["2.6", "3.6", "3.8"]
 input_parcels_fc_list = "*"
 
+# 10/06/23 Run #5
+# Notes: Several updates to the transportation and location requirements.
+requirements_to_process = "*"
+input_parcels_fc_list = "*"
+
+# 11/30/2023 Run #6
+# Notes: Re-run using updated version of the Statewide Toolbox (Statewide.tbx). Was erroneously run using Statewide_2023_v2_1.tbx for the previous run.
+requirements_to_process = ["3.1", "3.2", "3.4", "3.5", "8.1", "8.2"]
+input_parcels_fc_list = "*"
+
+# NOTE: If parcels change, the geodatabases should be deleted os the county parcel feature classes can be recreated.
+# If this is not performed, the old county parcels data copies will be used and the tables will be incorrect.
+
 ########################################################################################################################
 
 # Workspaces
@@ -91,7 +105,8 @@ scratch_ws = "P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQ
 # Toolbox containing models for processing additional requirements (from Charlotte Smith).
 # Updated Toolbox for version 2.0. Provided by Charlotte on 3/08/2023
 #statewide_toolbox = r"\\loxodonta\GIS\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_charlotte_smith\Tasks\CEQA_revisions_2023_03\Tools\Models\Statewide_2023_v2_0.tbx"
-statewide_toolbox = r"\\loxodonta\GIS\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Tools\Models\Statewide_2023_v2_1.tbx"
+#statewide_toolbox = r"\\loxodonta\GIS\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Tools\Models\Statewide_2023_v2_1.tbx"
+statewide_toolbox = r"\\loxodonta\GIS\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Tools\Models\Statewide.tbx"
 statewide_toolbox_alias = "Statewide"
 arcpy.ImportToolbox(statewide_toolbox, statewide_toolbox_alias)
 
@@ -146,7 +161,7 @@ county_name_field = "county_name"
 urbanized_area_prc_21071_fc = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Intermediate.gdb\urbanized_area_prc_21071_v2_0"
 
 # 2.2
-urban_area_prc_21094_5_fc = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Intermediate.gdb\urbanized_area_prc_21071_v2_0"
+urban_area_prc_21094_5_fc = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Intermediate.gdb\urban_area_prc_21094_5_v2_0"
 
 # 0.1, 2.3
 city_boundaries_fc = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Source\California_Incorporated_Cities_2023\_ags_dataB9A2584E098B4442A45D05AF49BC3B0C.gdb\incorp23_1"
@@ -161,7 +176,8 @@ incorporated_place_fc = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gou
 mpo_boundary_dissolve_fc = r"P:\Projects3\CDT-CEQA_California_2019_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Intermediate.gdb\MPO_boundaries_dissolve"
 
 # 2.7
-urbanized_area_urban_cluster_fc = r"P:\Projects3\CDT-CEQA_California_2019_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Inputs.gdb\CA_urbanized_area_urban_cluster"
+#urbanized_area_urban_cluster_fc = r"P:\Projects3\CDT-CEQA_California_2019_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Inputs.gdb\CA_urbanized_area_urban_cluster"
+urbanized_area_urban_cluster_fc = favorites_dir + r"\CBI Inputs.sde\cbiinputs.justin_heyerdahl.tl_2020_ca_uac20"
 
 # 8.5
 rare_threatened_or_endangered_fc = favorites_dir + r"\CBI Intermediate.sde\cbiintermediate.mike_gough.CA_Rare_Threatened_or_Endangered_Erase_Impervious_del_fields_23"
