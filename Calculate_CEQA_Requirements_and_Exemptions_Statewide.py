@@ -86,7 +86,7 @@ requirements_to_process = "*"
 input_parcels_fc_list = "*"
 
 # 11/30/2023 Run #6
-# Notes: Re-run using updated version of the Statewide Toolbox (Statewide.tbx). Was erroneously run using Statewide_2023_v2_1.tbx for the previous run.
+# Notes: Re-run using updated version of the Statewide Toolbox (Statewide.tbx). The old Statewide_2023_v2_1.tbx was used for the previous run.
 requirements_to_process = ["3.1", "3.2", "3.4", "3.5", "8.1", "8.2"]
 input_parcels_fc_list = "*"
 
