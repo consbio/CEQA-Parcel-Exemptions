@@ -30,11 +30,11 @@
 # NOTE If running from ArcGIS Desktop, the script begins to slow down over time. To increase the speed, run 50% of
 # counties at a time, or kill the script after it has completed a county and restart it on the remaining counties.
 
-# If processing requirements for all counties, manually delete requirements table first since all records in this table
-# will be deleted. This will increase performance.
-
-# Similarly, if processing exemptions for all counties, manually delete exemptions table first since all records in this
+# If processing requirements for all counties, manually delete the requirements table first since all records in this
 # table will be deleted. This will increase performance.
+
+# Similarly, if processing exemptions for all counties, manually delete the exemptions table first since all records in
+# this table will be deleted. This will increase performance.
 
 # Indicating the parcel feature classes to process:
 # Use "*" to process all counties, or create a list of counties to process. Examples:
@@ -90,7 +90,12 @@ input_parcels_fc_list = "*"
 requirements_to_process = ["3.1", "3.2", "3.4", "3.5", "8.1", "8.2"]
 input_parcels_fc_list = "*"
 
-# NOTE: If parcels change, the geodatabases should be deleted os the county parcel feature classes can be recreated.
+# 01/22/2024 Run #7
+# Notes: Data updates. Updates to NULL data list.
+requirements_to_process = ["2.6", "3.1", "3.2", "3.3", "3.4", "3.5", "9.2"]
+input_parcels_fc_list = "*"
+
+# NOTE: If parcels change, the geodatabases should be deleted as the county parcel feature classes can be recreated.
 # If this is not performed, the old county parcels data copies will be used and the tables will be incorrect.
 
 ########################################################################################################################
@@ -193,7 +198,8 @@ flood_plain_fc = r"P:\Projects3\CDT-CEQA_California_2019_mike_gough\Tasks\CEQA_P
 
 # 9.5
 landslide_area_percent_threshold = 20 # The percent of the parcel that must have a very high landslide susceptibility value.
-landslide_hazard_raster = r"P:\Projects3\CDT-CEQA_California_2019_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Inputs.gdb\CA_ms58_very_high_landslide_susceptibility_1s"
+#landslide_hazard_raster = r"P:\Projects3\CDT-CEQA_California_2019_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Inputs.gdb\CA_ms58_very_high_landslide_susceptibility_1s"
+landslide_hazard_raster = r"\\loxodonta\gis\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Data\Rasters\req9_5_LandslideHazard_20240118.tif"
 
 # 9.6
 state_conservancy_fc = r"P:\Projects3\CDT-CEQA_California_2019_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Inputs.gdb\CA_State_Conservancy_ds1754"
@@ -251,60 +257,61 @@ requirements = {
 # If county is missing data for a requirement (as indicated below), a field will be added to the county for that requirement with null values in it.
 
 # 07/24/2020 Added in sanbenito and santacruz as those were missing from the NoData list.
+# 01/22/2024 Updated for applicable reqs 2.6, 3.3, and 9.5 (Justin H).
 requirements_with_no_data = {
     # ALL COUNTIES
     "ALL_COUNTIES": [],
 
     #AMBAG
-    "monterey":["3.10","3.11","3.12","3.13","3.14","3.9"],
-    "sanbenito": ["3.10","3.11","3.12","3.13","3.14","3.9"],
-    "santacruz": ["3.10","3.11","3.12","3.13","3.14","3.9"],
+    "monterey":["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
+    "sanbenito":["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
+    "santacruz":["3.10","3.9","3.11","3.12","3.13","3.14","9.5"],
 
     # BCAG
-    "butte":["3.10","3.14"],
+    "butte":["3.10","3.14","9.5"],
 
     #FCOG
-    "fresno":["3.10","3.11","3.12","3.13","3.14","3.9"],
+    "fresno":["3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
 
     #KCAG
-    "kings":["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
+    "kings":["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
 
     # KCOG
-    "kern": ["3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
+    "kern": ["3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
 
     #MCAG
-    "merced":["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
+    "merced":["3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
 
     #MCTC
-    "madera":["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
+    "madera":["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
 
     # MTC
     "alameda": ["3.10","3.11","3.12","3.13", "3.14"],
-    "contracosta": ["3.10","3.11","3.12","3.13", "3.14"],
-    "marin": ["3.10","3.11","3.12","3.13","3.14"],
-    "napa": ["3.10","3.11","3.12","3.13","3.14"],
-    "sanfrancisco": ["3.10","3.11","3.12","3.13","3.14"],
+    "contracosta": ["3.10","3.11","3.12","3.13","3.14"],
+    "marin": ["3.10","3.11","3.12","3.13","3.14","9.5"],
+    "napa": ["3.10","3.11","3.12","3.13","3.14","9.5"],
+    "sanfrancisco": ["2.6","3.10","3.11","3.12","3.13","3.14"],
     "sanmateo": ["3.10","3.11","3.12","3.13","3.14"],
     "santaclara": ["3.10","3.11","3.12","3.13","3.14"],
-    "solano": ["3.10","3.11","3.12","3.13","3.14"],
-    "sonoma": ["3.10","3.11","3.12","3.13","3.14"],
+    "solano": ["3.10","3.11","3.12","3.13","3.14","9.5"],
+    "sonoma": ["3.10","3.11","3.12","3.13","3.14","9.5"],
 
     # SACOG
-    "eldorado": [],
-    "placer": [],
-    "sacramento": [],
-    "sutter": [],
-    "yolo": [],
-    "yuba": [],
+    "eldorado": ["9.5"],
+    "placer": ["9.5"],
+    "sacramento": ["9.5"],
+    "sutter": ["9.5"],
+    "yolo": ["9.5"],
+    "yuba": ["9.5"],
 
     # SANDAG
-    "sandiego": ["3.10","3.11","3.12","3.13","3.14","3.9"],
+    "sandiego": ["3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
 
     #SBCAG
-    "santabarbara":["2.6","3.10","3.11","3.12","3.13","3.14","3.9"],
+    "santabarbara":["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
 
     # SCAG
-    "imperial": ["3.10","3.14"],
+    "imperial": ["3.10","3.14","9.5"],
     "losangeles": ["3.10","3.14"],
     "orange": ["3.10","3.14"],
     "riverside": ["3.10","3.14"],
@@ -312,43 +319,42 @@ requirements_with_no_data = {
     "ventura": ["3.10","3.14"],
 
     #SJCOG
-    "sanjoaquin":["2.6","3.10","3.11","3.12","3.13","3.14","3.9"],
+    "sanjoaquin":["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
 
     #SLOCOG
-    "sanluisobispo":["3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
+    "sanluisobispo":["3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
 
     #SRTA
-    "shasta":["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
+    "shasta":["3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
 
     #StanCOG
-    "stanislaus":["2.6","3.10","3.11","3.12","3.13","3.14","3.9"],
+    "stanislaus":["3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
 
     #TCAG
-    "tulare": ["2.6","3.10","3.11","3.12","3.13","3.14","3.9"],
+    "tulare": ["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
 
     # OTHER COUNTIES
-    "alpine": ["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
-    "amador": ["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
-    "calaveras": ["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
-    "colusa": ["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
-    "delnorte": ["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
-    "glenn": ["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
-    "humboldt": ["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
-    "inyo": ["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
-    "lake": ["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
-    "lassen": ["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
-    "mariposa": ["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
-    "mendocino": ["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
-    "modoc": ["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
-    "mono": ["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
-    "nevada": ["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
-    "plumas": ["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
-    "sierra": ["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
-    "siskiyou": ["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
-    "tehama": ["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
-    "trinity": ["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
-    "tuolumne": ["2.6","3.3","3.10","3.11","3.12","3.13","3.14","3.9"],
-
+    "alpine": ["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
+    "amador": ["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
+    "calaveras": ["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
+    "colusa": ["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
+    "delnorte": ["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
+    "glenn": ["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
+    "humboldt": ["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
+    "inyo": ["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
+    "lake": ["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
+    "lassen": ["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
+    "mariposa": ["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
+    "mendocino": ["3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
+    "modoc": ["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
+    "mono": ["3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
+    "nevada": ["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
+    "plumas": ["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
+    "sierra": ["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
+    "siskiyou": ["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
+    "tehama": ["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
+    "trinity": ["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
+    "tuolumne": ["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
 }
 
 # 04/06/2023 March 6 2023 version of Criteria Spreadsheet. Requirement 3.6 was added back in.
@@ -359,18 +365,18 @@ exemptions = {
     "21155.4": ["2.5", "2.6", "3.3"],
     "21094.5": ["2.2", ["3.1", "3.5", "3.8", "3.10", "3.11"]],
     "65457": ["2.6"],
-    #7: ["15183"", ""], # No Requirements
+    # "15183": [""], # No Requirements
     "15332": ["2.3", "8.5"],
     "21159.25": ["2.4", "2.7", "8.5"],
-    #10: ["15303", "CEQA Guidelines", ["2.1"]], # No Requirements
+    # "15303": ["2.1"], # No Requirements
     "21099": ["3.3"],
     "21159.28": ["2.5"],
-    #"15064.3": [["3.1", "3.5", "3.6", "3.7"]]
     #"15064.3": [["3.1", "3.5"]] # Remove 3.6 and 3.7
      "15064.3": [["3.1", "3.5", "3.6"]] # Add 3.6 back in. We have 3.6 for CEQA Site Check version 2.0
 }
 
 # DATA PROCESSING FUNCTIONS ############################################################################################
+
 
 def copy_parcels_fc(input_parcels_fc, output_parcels_fc):
     """ Copies the original parcels feature class with only a subset of the original fields.
@@ -431,7 +437,7 @@ def calculate_requirements(requirements_to_process=requirements.keys()):
 
     county_name = os.path.basename(output_parcels_fc).split("_")[0].lower()
 
-    # Get a list of all the requirements that this county  doesn't have data for.
+    # Get a list of all the requirements that this county doesn't have data for.
     requirements_with_no_data_this_county = requirements_with_no_data[county_name] + requirements_with_no_data["ALL_COUNTIES"]
 
     # If the field for the no data requirement exists, calculate values as <null>.
@@ -693,7 +699,7 @@ class RequirementFunctions(object):
                 #Calculate the percent of the landslide hazard pixels with the parcel
                 percent_high_landslide = (float(landslide_hazard_sq_meters) / parcel_area) * 100
 
-                # If it's > the threshold, it's not elligible.
+                # If it's > the threshold, it's not eligible.
                 if percent_high_landslide >= landslide_area_percent_threshold:
                     row[2] = 0
 
