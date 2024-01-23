@@ -21,8 +21,12 @@ import arcpy
 import os
 import datetime
 import json
+import csv
 
 arcpy.env.overwriteOutput = True
+
+appdata_dir = os.environ.get("APPDATA")
+favorites_dir = appdata_dir + "\Esri\ArcGISPro\Favorites"
 
 start_script = datetime.datetime.now()
 print("Start Script: " + str(start_script))
@@ -35,20 +39,25 @@ zoning_input_fc = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tas
 zip_codes_input_fc = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Inputs.gdb\California_Zip_Codes_Projected"
 census_block_source_fc = r"\\loxodonta\gis\Source_Data\society\state\CA\Census\2022\tl_2022_06_tabblock20\tl_2022_06_tabblock20.shp"
 
-# Justin's project version of specific plans
-specific_plan_source_fc = r"\\loxodonta\gis\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Data\IntermediateData.gdb\NAD83_Projected\req2_6_specificplan_coverage"
+# Justin's ucd_zoning lookup:
+code_to_ucd_zoning_lookup = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\CAZoning_Lookup.csv"
+
+# Justin's most recent version of specific plans (01/16/2024):
+specific_plan_source_fc = favorites_dir + r"\CBI Intermediate.sde\cbiintermediate.justin_heyerdahl.req2_6_SpecificPlan_Coverage_20240116"
 
 tmp_gdb = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Scratch\Scratch.gdb"
 input_gdb = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Inputs.gdb"
 
 #test_parcels = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Test_Parcels\Test_Parcels.gdb\ALAMEDA_Parcels_Explode_Subset_3"
 #test_parcels = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Test_Parcels\Test_Parcels.gdb\ALAMEDA_Parcels_Explode_Zoning_Field_Description"
+test_parcels_with_zoning = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Test_Zoning\Test_Parcels.gdb\Twelve_Parcels_With_Zoning"
 
 # Field Names:
 cbi_parcel_id_field = "cbi_parcel_id_fips_apn_oid"
 #zoning_field = "ucd_description"  # The field in the zoning dataset that contains the zoning designation.
 #zoning_field = "description"  # The field in the zoning dataset that contains the zoning designation.
 zoning_field = "Code"  # Mark instructed us to use this field on 08/28/2023
+specific_plan_field = "sp_name"
 
 # Output Parameters:
 output_gdb = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Parcels\Parcels_Prepared_By_County.gdb"
@@ -60,6 +69,8 @@ statewide_parcels_input_fc_with_zip_mpo_sp = r"P:\Projects3\CEQA_Site_Check_Vers
 #statewide_parcels_input_fc_with_zip_mpo_sp_zoning = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Parcels\Parcels_Projected_Delete_Identical.gdb\Statewide_Parcels_With_Zip_MPO_SP_Zoning"
 statewide_parcels_input_fc_with_zip_mpo_sp_zoning_block = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Parcels\Parcels_Projected_Delete_Identical.gdb\Statewide_Parcels_With_Zip_MPO_SP_Zoning_Block"
 
+# Custom, out of order, runs:
+statewide_parcels_input_fc_with_zip_mpo_sp_zoning_block_update_sp = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Parcels\Parcels_Projected_Delete_Identical.gdb\Statewide_Parcels_With_Zip_MPO_SP_Zoning_Block_Update_SP"
 
 output_crs = arcpy.SpatialReference("NAD_1983_California_Teale_Albers")
 
@@ -187,6 +198,8 @@ def calc_zip_codes():
 
     print("\nPerforming a spatial join with parcels and zip codes...")
 
+
+
     arcpy.SpatialJoin_analysis(statewide_parcels_input_fc, zip_codes_input_fc, statewide_parcels_input_fc_with_zip,
                                "JOIN_ONE_TO_ONE", "KEEP_ALL",
                                'fips "fips" true true false 8 Text 0 0,First,#,Statewide_Parcels,fips,0,8;county_name "county_name" true true false 32 Text 0 0,First,#,Statewide_Parcels,county_name,0,32;fips_apn "fips_apn" true true false 30 Text 0 0,First,#,Statewide_Parcels,fips_apn,0,30;apn "apn" true true false 20 Text 0 0,First,#,Statewide_Parcels,apn,0,20;apn_d "apn_d" true true false 17 Text 0 0,First,#,Statewide_Parcels,apn_d,0,17;s_city "s_city" true true false 50 Text 0 0,First,#,Statewide_Parcels,s_city,0,50;s_addr_d "s_addr_d" true true false 52 Text 0 0,First,#,Statewide_Parcels,s_addr_d,0,52;cbi_parcel_id_fips_apn_oid "cbi_parcel_id_fips_apn_oid" true true false 255 Text 0 0,First,#,Statewide_Parcels,cbi_parcel_id_fips_apn_oid,0,255;state_name "state_name" true true false 255 Text 0 0,First,#,Statewide_Parcels,state_name,0,255;latitude "latitude" true true false 8 Double 0 0,First,#,Statewide_Parcels,latitude,-1,-1;longitude "longitude" true true false 8 Double 0 0,First,#,Statewide_Parcels,longitude,-1,-1;zip_code "Zip Code" true true false 10 Text 0 0,First,#,California_Zip_Codes_Projected,ZIP_CODE,0,10',
@@ -225,23 +238,40 @@ def join_mpo_name(input_fc):
     print("Duration: " + str(duration))
 
 
-def join_specific_plan_name(input_fc):
+def join_specific_plan_name(input_fc, output_fc=statewide_parcels_input_fc_with_zip_mpo_sp):
     """ Joins the Specific Plan Name from the specific plan boundary that a parcel falls within. """
 
-    print(" Joining Specific Plan name to parcels...")
+    print("Deleting Specific Plan Field...")
+    arcpy.DeleteField_management(input_fc, "Specific_Plan")
 
-    output_fc = statewide_parcels_input_fc_with_zip_mpo_sp
+    print("Joining Specific Plan name to parcels...")
 
     start = datetime.datetime.now()
     print("Start: " + str(start))
 
+    sp_fields_to_keep = ["OBJECTID", specific_plan_field]
+    field_info_string = ""
+    fields = [field.name for field in arcpy.ListFields(specific_plan_source_fc)]
+    for field in fields:
+        if field in sp_fields_to_keep:
+            substr = field + " " + field + " VISIBLE NONE;"
+        else:
+            substr = field + " " + field + " HIDDEN NONE;"
+
+        field_info_string += substr
+
+    print(field_info_string)
+
     arcpy.MakeFeatureLayer_management(
         in_features=specific_plan_source_fc,
         out_layer="specific_plan_layer", where_clause="", workspace="",
-        field_info="OBJECTID OBJECTID VISIBLE NONE;Shape Shape HIDDEN NONE;MPO_Code MPO_Code HIDDEN NONE;MPO_Name MPO_Name HIDDEN NONE;SP_Name SP_Name VISIBLE NONE;County_Name County_Name HIDDEN NONE;City_Name City_Name HIDDEN NONE;Type Type HIDDEN NONE;Acres Acres HIDDEN NONE;Source_Date Source_Date HIDDEN NONE;Source_Data Source_Data HIDDEN NONE;YrSP_Adopted YrSP_Adopted HIDDEN NONE;YrSP_LastUP YrSP_LastUP HIDDEN NONE;Website Website HIDDEN NONE;SiteCheck SiteCheck HIDDEN NONE;QUERY QUERY HIDDEN NONE;Shape_Length Shape_Length HIDDEN NONE;Shape_Area Shape_Area HIDDEN NONE")
+        #field_info="OBJECTID OBJECTID VISIBLE NONE;Shape Shape HIDDEN NONE;MPO_Code MPO_Code HIDDEN NONE;MPO_Name MPO_Name HIDDEN NONE;SP_Name SP_Name VISIBLE NONE;County_Name County_Name HIDDEN NONE;City_Name City_Name HIDDEN NONE;Type Type HIDDEN NONE;Acres Acres HIDDEN NONE;Source_Date Source_Date HIDDEN NONE;Source_Data Source_Data HIDDEN NONE;YrSP_Adopted YrSP_Adopted HIDDEN NONE;YrSP_LastUP YrSP_LastUP HIDDEN NONE;Website Website HIDDEN NONE;SiteCheck SiteCheck HIDDEN NONE;QUERY QUERY HIDDEN NONE;Shape_Length Shape_Length HIDDEN NONE;Shape_Area Shape_Area HIDDEN NONE")
+        field_info=field_info_string)
 
+    print("Spatial Join")
     arcpy.SpatialJoin_analysis(target_features=input_fc, join_features="specific_plan_layer", out_feature_class=output_fc, join_operation="JOIN_ONE_TO_ONE", join_type="KEEP_ALL", field_mapping="", match_option="HAVE_THEIR_CENTER_IN", search_radius="", distance_field_name="")
 
+    print("Alter Field")
     arcpy.AlterField_management(output_fc,"SP_Name", "Specific_Plan")
 
     end = datetime.datetime.now()
@@ -440,6 +470,29 @@ def separate_into_counties(input_fc):
     print("Duration: " + str(duration))
 
 
+def add_zoning_description(input_fc):
+
+    zoning_lookup_dict = {}
+    with open(code_to_ucd_zoning_lookup, "r") as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+        for row in csv_reader:
+            code = row["Code"]
+            ucd_description = row["ucd_description"]
+            zoning_lookup_dict[code] = ucd_description
+
+    arcpy.AddField_management(input_fc, "Zoning_Designation_UCD_Desc", "Text","","", 1000)
+
+    with arcpy.da.UpdateCursor(input_fc, ["Zoning_Designation", "Zoning_Designation_UCD_Desc"]) as uc:
+        for row in uc:
+            code_and_ucd_desc_dict = {}
+            code_dict = json.loads(row[0])
+            for code, percent in code_dict.items():
+                ucd_description = zoning_lookup_dict[code]
+                code_and_ucd_desc_dict[code] = [percent, ucd_description]
+            row[1] = json.dumps(code_and_ucd_desc_dict)
+            uc.updateRow(row)
+
+
 #project_and_delete_dups()
 #explode()
 #add_and_calculate_fields()
@@ -448,8 +501,17 @@ def separate_into_counties(input_fc):
 #join_specific_plan_name(input_fc=statewide_parcels_input_fc_with_zip_mpo)
 #join_zoning_designations(input_fc=statewide_parcels_input_fc_with_zip_mpo_sp_zoning_block, threshold=20)
 #join_census_block(input_fc=statewide_parcels_input_fc_with_zip_mpo_sp)
-#clean_up_fields(input_fc=statewide_parcels_input_fc_with_zip_mpo_sp, fields_to_delete=["Shape_Length_1", "Shape_Area_1", "Join_Count", "TARGET_FID", "Join_Count_1", "Join_Count_12", "TARGET_FID_1", "TARGET_FID_12"])
-separate_into_counties(input_fc=statewide_parcels_input_fc_with_zip_mpo_sp_zoning_block)
+
+# Not used...
+#add_zoning_description(input_fc=test_parcels_with_zoning)
+
+# Custom, out of order, runs:
+#join_specific_plan_name(input_fc=statewide_parcels_input_fc_with_zip_mpo_sp_zoning_block, output_fc=statewide_parcels_input_fc_with_zip_mpo_sp_zoning_block_update_sp)
+##
+
+clean_up_fields(input_fc=statewide_parcels_input_fc_with_zip_mpo_sp_zoning_block_update_sp, fields_to_delete=["Shape_Length_1", "Shape_Area_1", "Join_Count", "TARGET_FID", "Join_Count_1", "Join_Count_12", "TARGET_FID_1", "TARGET_FID_12"])
+
+separate_into_counties(input_fc=statewide_parcels_input_fc_with_zip_mpo_sp_zoning_block_update_sp)
 
 end_script = datetime.datetime.now()
 print("\nEnd Script: " + str(end_script))
