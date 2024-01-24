@@ -27,14 +27,15 @@
 # ArcGIS Desktop: ~ 1 week (all counties and requirements)
 # ArcGIS Pro: 3 Days 20 hours (all counties and requirements without deleting requirements & exemptions tables).
 # ~5 days if parcels change and those need to be recreated.
+# ArcGIS Pro: 1 requirement (9.5) ~17 hours.
 # NOTE If running from ArcGIS Desktop, the script begins to slow down over time. To increase the speed, run 50% of
 # counties at a time, or kill the script after it has completed a county and restart it on the remaining counties.
 
-# If processing requirements for all counties, manually delete the requirements table first since all records in this
-# table will be deleted. This will increase performance.
+# If processing requirements for all counties (any number of requirements), manually delete the requirements table
+# first since all records in this table will be deleted. This will increase performance.
 
-# Similarly, if processing exemptions for all counties, manually delete the exemptions table first since all records in
-# this table will be deleted. This will increase performance.
+# Similarly, if processing exemptions for all counties (any number of requirements), manually delete the exemptions
+# table first since all records in this table will be deleted. This will increase performance.
 
 # Indicating the parcel feature classes to process:
 # Use "*" to process all counties, or create a list of counties to process. Examples:
@@ -87,12 +88,16 @@ input_parcels_fc_list = "*"
 
 # 11/30/2023 Run #6
 # Notes: Re-run using updated version of the Statewide Toolbox (Statewide.tbx). The old Statewide_2023_v2_1.tbx was used for the previous run.
-requirements_to_process = ["3.1", "3.2", "3.4", "3.5", "8.1", "8.2"]
-input_parcels_fc_list = "*"
+#requirements_to_process = ["3.1", "3.2", "3.4", "3.5", "8.1", "8.2"]
+#input_parcels_fc_list = "*"
 
-# 01/22/2024 Run #7
+# 01/22/2024 Run #7 (v5.3)
 # Notes: Data updates. Updates to NULL data list.
-requirements_to_process = ["2.6", "3.1", "3.2", "3.3", "3.4", "3.5", "9.2"]
+#requirements_to_process = ["2.6", "3.1", "3.2", "3.3", "3.4", "3.5", "9.2"]
+#input_parcels_fc_list = "*"
+
+# 01/23/2024 Run #8 (v5.4)
+requirements_to_process = ["9.5"]
 input_parcels_fc_list = "*"
 
 # NOTE: If parcels change, the geodatabases should be deleted as the county parcel feature classes can be recreated.
@@ -376,6 +381,11 @@ exemptions = {
 }
 
 # DATA PROCESSING FUNCTIONS ############################################################################################
+
+if input_parcels_fc_list == "*":
+    input("All parcels will be processed. Deleting the requirements and exemptions tables will increase performance." +
+          " It is recommended that you do that now (after backing up metadata if needed). " +
+          " When you're ready, push any key to continue...")
 
 
 def copy_parcels_fc(input_parcels_fc, output_parcels_fc):
