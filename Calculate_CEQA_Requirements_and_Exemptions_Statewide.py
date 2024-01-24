@@ -18,7 +18,7 @@
 # A NULL value indicates that there is not enough information to calculate a 1 or a 0.
 # In most cases, this is due to a lack of data representing the phenomenon being assessed.
 # The list of counties and the requirements for which they are missing data is defined by the user
-# (refer to the requirements_with_no_data dictionary)
+# (refer to the requirements_with_no_data dictionary).
 # Each requirement is calculated either by a python function, or a call to an external ArcGIS Model.
 # The logic for each is defined by a set of methods in the RequirementFunctions class.
 # Use the function calls at the bottom of this script to choose which operations this script should perform.
