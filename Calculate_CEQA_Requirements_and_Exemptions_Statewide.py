@@ -97,6 +97,12 @@ input_parcels_fc_list = "*"
 #input_parcels_fc_list = "*"
 
 # 01/23/2024 Run #8 (v5.4)
+#requirements_to_process = ["9.5"]
+#input_parcels_fc_list = "*"
+
+# 02/02/2024 Run #9 (v5.5)
+# Duration: 1 day, 0:23:23.437617
+# Rerun with 1m landslide raster.
 requirements_to_process = ["9.5"]
 input_parcels_fc_list = "*"
 
@@ -204,7 +210,9 @@ flood_plain_fc = r"P:\Projects3\CDT-CEQA_California_2019_mike_gough\Tasks\CEQA_P
 # 9.5
 landslide_area_percent_threshold = 20 # The percent of the parcel that must have a very high landslide susceptibility value.
 #landslide_hazard_raster = r"P:\Projects3\CDT-CEQA_California_2019_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Inputs.gdb\CA_ms58_very_high_landslide_susceptibility_1s"
-landslide_hazard_raster = r"\\loxodonta\gis\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Data\Rasters\req9_5_LandslideHazard_20240118.tif"
+#landslide_hazard_raster = r"\\loxodonta\gis\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Data\Rasters\req9_5_LandslideHazard_20240118.tif"
+# New 1m version (02/02/2024)
+landslide_hazard_raster = r"\\loxodonta\gis\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Data\Rasters\req9_5_LandslideHazard_1m_20240118.tif"
 
 # 9.6
 state_conservancy_fc = r"P:\Projects3\CDT-CEQA_California_2019_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Inputs.gdb\CA_State_Conservancy_ds1754"
