@@ -103,7 +103,13 @@ input_parcels_fc_list = "*"
 # 02/02/2024 Run #9 (v5.5)
 # Duration: 1 day, 0:23:23.437617
 # Rerun with 1m landslide raster.
-requirements_to_process = ["9.5"]
+#requirements_to_process = ["9.5"]
+#input_parcels_fc_list = "*"
+
+# 02/26/2024 Run #10 (v5.6)
+# Duration:
+# Updates to NULL list and
+requirements_to_process = ["2.6"]
 input_parcels_fc_list = "*"
 
 # NOTE: If parcels change, the geodatabases should be deleted as the county parcel feature classes can be recreated.
@@ -271,6 +277,7 @@ requirements = {
 
 # 07/24/2020 Added in sanbenito and santacruz as those were missing from the NoData list.
 # 01/22/2024 Updated for applicable reqs 2.6, 3.3, and 9.5 (Justin H).
+# 02/26/2024 Updated for applicable reqs 2.6 (Justin H).
 requirements_with_no_data = {
     # ALL COUNTIES
     "ALL_COUNTIES": [],
@@ -321,7 +328,7 @@ requirements_with_no_data = {
     "sandiego": ["3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
 
     #SBCAG
-    "santabarbara":["2.6","3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
+    "santabarbara":["3.9","3.10","3.11","3.12","3.13","3.14","9.5"],
 
     # SCAG
     "imperial": ["3.10","3.14","9.5"],
