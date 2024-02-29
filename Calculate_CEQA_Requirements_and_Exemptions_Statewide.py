@@ -107,7 +107,7 @@ input_parcels_fc_list = "*"
 #input_parcels_fc_list = "*"
 
 # 02/26/2024 Run #10 (v5.6)
-# Duration:
+# Duration: 4:38:20.836241 (new workstation)
 # Updates to NULL list and
 requirements_to_process = ["2.6"]
 input_parcels_fc_list = "*"
