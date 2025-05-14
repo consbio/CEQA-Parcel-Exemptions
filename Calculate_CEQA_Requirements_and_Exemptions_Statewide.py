@@ -112,6 +112,12 @@ input_parcels_fc_list = "*"
 requirements_to_process = ["2.6"]
 input_parcels_fc_list = "*"
 
+# 05/12/2025 Run #11 (v5.7)
+# Duration:
+# Updates to 3.1, 3.2, 3.3, 3.4, 3.5, 3.8, 9.2 (Justin) + 9.3 (Mike) & 9.5 (Justin updated data)
+requirements_to_process = "*"
+input_parcels_fc_list = "*"
+
 # NOTE: If parcels change, the geodatabases should be deleted as the county parcel feature classes can be recreated.
 # If this is not performed, the old county parcels data copies will be used and the tables will be incorrect.
 
@@ -128,7 +134,9 @@ scratch_ws = "P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQ
 # Updated Toolbox for version 2.0. Provided by Charlotte on 3/08/2023
 #statewide_toolbox = r"\\loxodonta\GIS\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_charlotte_smith\Tasks\CEQA_revisions_2023_03\Tools\Models\Statewide_2023_v2_0.tbx"
 #statewide_toolbox = r"\\loxodonta\GIS\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Tools\Models\Statewide_2023_v2_1.tbx"
-statewide_toolbox = r"\\loxodonta\GIS\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Tools\Models\Statewide.tbx"
+#statewide_toolbox = r"\\loxodonta\GIS\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Tools\Models\Statewide.tbx"
+# 05/12/2025
+statewide_toolbox = r"\\loxodonta\GIS\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Tools\Models\Statewide_202505"
 statewide_toolbox_alias = "Statewide"
 arcpy.ImportToolbox(statewide_toolbox, statewide_toolbox_alias)
 
@@ -208,7 +216,9 @@ rare_threatened_or_endangered_fc = favorites_dir + r"\CBI Intermediate.sde\cbiin
 prime_farmlands_fc = r"\\loxodonta\gis\Source_Data\farming\state\CA\FMMP\2018_2016_from_Data_Basin\California - Farmland Mapping and Monitoring Program (FMMP), 2018_2016\data\commondata\2018_in_progress_fmmp_shape_files\CA_FMMP_2018_state.shp"
 
 # 9.3
-wildfire_hazard_fc = r"\\loxodonta\gis\Source_Data\environment\state\CA\Fire_Hazard_Severity_Zones_2017\fhszs06_3.shp"
+#wildfire_hazard_fc = r"\\loxodonta\gis\Source_Data\environment\state\CA\Fire_Hazard_Severity_Zones_2017\fhszs06_3.shp"
+# 05/12/2025
+wildfire_hazard_fc =  r"\\loxodonta\gis\Source_Data\environment\state\CA\CALFIRE_FireHazardSeverityZones\2024\FHSZSRA_23_3\FHSZSRA_23_3.gdb\FHSZSRA_23_3"
 
 # 9.4
 flood_plain_fc = r"P:\Projects3\CDT-CEQA_California_2019_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Inputs.gdb\CA_100_Year_FEMA_Floodplain"
@@ -218,7 +228,9 @@ landslide_area_percent_threshold = 20 # The percent of the parcel that must have
 #landslide_hazard_raster = r"P:\Projects3\CDT-CEQA_California_2019_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Inputs.gdb\CA_ms58_very_high_landslide_susceptibility_1s"
 #landslide_hazard_raster = r"\\loxodonta\gis\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Data\Rasters\req9_5_LandslideHazard_20240118.tif"
 # New 1m version (02/02/2024)
-landslide_hazard_raster = r"\\loxodonta\gis\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Data\Rasters\req9_5_LandslideHazard_1m_20240118.tif"
+#landslide_hazard_raster = r"\\loxodonta\gis\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Data\Rasters\req9_5_LandslideHazard_1m_20240118.tif"
+# 05/12/2025
+landslide_hazard_raster = r"\\loxodonta\gis\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Data\Rasters\req9_5_LandslideHazard_202505.tif"
 
 # 9.6
 state_conservancy_fc = r"P:\Projects3\CDT-CEQA_California_2019_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Inputs.gdb\CA_State_Conservancy_ds1754"
@@ -399,7 +411,8 @@ exemptions = {
 
 if input_parcels_fc_list == "*":
     input("All parcels will be processed. Deleting the requirements and exemptions tables will increase performance." +
-          " It is recommended that you do that now (after backing up metadata if needed). " +
+          " It is recommended that you do that now (after backing up those tables to a new geodatabase in the Archive folder). " +
+          " No need to delete the county parcels, unless those data have changed. " +
           " When you're ready, push any key to continue...")
 
 
@@ -668,7 +681,9 @@ class RequirementFunctions(object):
             """
         output_parcels_layer = arcpy.MakeFeatureLayer_management(output_parcels_fc)
         wildfire_hazard_layer = arcpy.MakeFeatureLayer_management(wildfire_hazard_fc)
-        expression = "\"HAZ_CLASS\" = 'High' or \"HAZ_CLASS\" = 'Very High'"
+        #expression = "\"HAZ_CLASS\" = 'High' or \"HAZ_CLASS\" = 'Very High'"
+        # 05/12/2025 Update
+        expression = "\"FHSZ_Description\" = 'High' or \"FHSZ_Description\" = 'Very High'"
         wildfire_hazard_types_selected = arcpy.SelectLayerByAttribute_management(wildfire_hazard_layer, "NEW_SELECTION", expression)
 
         arcpy.SelectLayerByLocation_management(output_parcels_layer, "INTERSECT", wildfire_hazard_types_selected)
