@@ -74,6 +74,9 @@ statewide_parcels_input_fc_with_zip_mpo_sp_zoning_block_update_sp = r"P:\Project
 
 output_crs = arcpy.SpatialReference("NAD_1983_California_Teale_Albers")
 
+print("Add code to remove newline characters in the apn field. See email from Brianna.")
+exit()
+
 def project_and_delete_dups():
     """ Function to project the state-wide parcels dataset provided by OPR and delete parcels with duplicate
     geometry. ~1hr"""
