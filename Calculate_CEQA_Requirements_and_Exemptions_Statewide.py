@@ -31,11 +31,13 @@
 # NOTE If running from ArcGIS Desktop, the script begins to slow down over time. To increase the speed, run 50% of
 # counties at a time, or kill the script after it has completed a county and restart it on the remaining counties.
 
-# If processing requirements for all counties (any number of requirements), manually delete the requirements table
+# If processing all requirements for all counties (any number of requirements), manually delete the requirements table
 # first since all records in this table will be deleted. This will increase performance.
 
 # Similarly, if processing exemptions for all counties (any number of requirements), manually delete the exemptions
 # table first since all records in this table will be deleted. This will increase performance.
+
+# Don't delete the tables if running individual requirements for some or all counties
 
 # Indicating the parcel feature classes to process:
 # Use "*" to process all counties, or create a list of counties to process. Examples:
@@ -43,11 +45,15 @@
 # input_parcels_fc_list = ["SANBENITO_Parcels", "SANBERNARDINO_Parcels"].
 # For one county, also use a list. For example, ["SANBENITO_Parcels"]
 
-# Indicate the requirements to process.
+# Indicating the requirements to process:
 # Use "*" to process all requirements, or create a list of requirements to process. Examples:
 # requirements_to_process = "*"
 # requirements_to_process = ["3.10", "2.6"].
 # For one requirement, also use a list. For example, ["3.10"]
+
+# NOTE: If parcels change, the geodatabases should be deleted as the county parcel feature classes can be recreated.
+# If this is not performed, the old county parcels data copies will be used and the tables will be incorrect.
+
 ########################################################################################################################
 
 import os
@@ -116,6 +122,114 @@ input_parcels_fc_list = "*"
 # Duration:
 # Updates to 3.1, 3.2, 3.3, 3.4, 3.5, 3.8, 9.2 (Justin) + 9.3 (Mike) & 9.5 (Justin updated data)
 requirements_to_process = "*"
+input_parcels_fc_list = [
+"SACRAMENTO_Parcels",
+"SANBENITO_Parcels",
+"SANBERNARDINO_Parcels",
+"SANDIEGO_Parcels",
+"SANFRANCISCO_Parcels",
+"SANJOAQUIN_Parcels",
+"SANLUISOBISPO_Parcels",
+"SANMATEO_Parcels",
+"SANTABARBARA_Parcels",
+"SANTACLARA_Parcels",
+"SANTACRUZ_Parcels",
+"SHASTA_Parcels",
+"SIERRA_Parcels",
+"SISKIYOU_Parcels",
+"SOLANO_Parcels",
+"SONOMA_Parcels",
+"STANISLAUS_Parcels",
+"SUTTER_Parcels",
+"TEHAMA_Parcels",
+"TRINITY_Parcels",
+"TULARE_Parcels",
+"TUOLUMNE_Parcels",
+"VENTURA_Parcels",
+"YOLO_Parcels",
+"YUBA_Parcels",
+]
+
+# Duration for counties above:
+# Duration: 23:04:56.923772
+
+# 05/20/2025
+input_parcels_fc_list = ["RIVERSIDE_Parcels"]
+requirements_to_process = ["9.6", "9.7", "9.8"]  # Succeeded with Python 3.x/ArcGIS Pro interpreter.
+requirements_to_process = ["9.5"]  # RIVERSIDE Fails with Python 3.x/ArcGIS Pro interpreter. Succeeded with Python 2.7/ArcGIS Desktop interpreter and new 1m version.
+
+# 05/20/2025
+# Rerun 9.5 for remaining counties using 1m version and Python 3.x/ArcGIS Pro.
+requirements_to_process = ["9.5"]
+
+# 05/21/2025
+# Rerun all (without RIVERSIDE 1st), just in case the dev team identifies problems with surgery performed on last run.
+# If dev team confirms all is good, delete resulting requirements & exemptions tables (and rename exemptions_v5_7_20250521 and requirements_v5_7_20250521 back to requirements and exemptions).
+requirements_to_process = "*"
+input_parcels_fc_list = [
+"ALAMEDA_Parcels",
+"ALPINE_Parcels",
+"AMADOR_Parcels",
+"BUTTE_Parcels",
+"CALAVERAS_Parcels",
+"COLUSA_Parcels",
+"CONTRACOSTA_Parcels",
+"DELNORTE_Parcels",
+"ELDORADO_Parcels",
+"FRESNO_Parcels",
+"GLENN_Parcels",
+"HUMBOLDT_Parcels",
+"IMPERIAL_Parcels",
+"INYO_Parcels",
+"KERN_Parcels",
+"KINGS_Parcels",
+"LAKE_Parcels",
+"LASSEN_Parcels",
+"LOSANGELES_Parcels",
+"MADERA_Parcels",
+"MARIN_Parcels",
+"MARIPOSA_Parcels",
+"MENDOCINO_Parcels",
+"MERCED_Parcels",
+"MODOC_Parcels",
+"MONO_Parcels",
+"MONTEREY_Parcels",
+"NAPA_Parcels",
+"NEVADA_Parcels",
+"ORANGE_Parcels",
+"PLACER_Parcels",
+"PLUMAS_Parcels",
+"RIVERSIDE_Parcels",
+"SACRAMENTO_Parcels",
+"SANBENITO_Parcels",
+"SANBERNARDINO_Parcels",
+"SANDIEGO_Parcels",
+"SANFRANCISCO_Parcels",
+"SANJOAQUIN_Parcels",
+"SANLUISOBISPO_Parcels",
+"SANMATEO_Parcels",
+"SANTABARBARA_Parcels",
+"SANTACLARA_Parcels",
+"SANTACRUZ_Parcels",
+"SHASTA_Parcels",
+"SIERRA_Parcels",
+"SISKIYOU_Parcels",
+"SOLANO_Parcels",
+"SONOMA_Parcels",
+"STANISLAUS_Parcels",
+"SUTTER_Parcels",
+"TEHAMA_Parcels",
+"TRINITY_Parcels",
+"TULARE_Parcels",
+"TUOLUMNE_Parcels",
+"VENTURA_Parcels",
+"YOLO_Parcels",
+"YUBA_Parcels",
+]
+
+# 06/03/2025
+# Rerun 9.3 (Wildfire Hazard). After consulting with Natalie, Brianne instructed us to include the "Moderate" class.
+requirements_to_process = ["9.3"]
 input_parcels_fc_list = "*"
 
 # NOTE: If parcels change, the geodatabases should be deleted as the county parcel feature classes can be recreated.
@@ -227,10 +341,24 @@ flood_plain_fc = r"P:\Projects3\CDT-CEQA_California_2019_mike_gough\Tasks\CEQA_P
 landslide_area_percent_threshold = 20 # The percent of the parcel that must have a very high landslide susceptibility value.
 #landslide_hazard_raster = r"P:\Projects3\CDT-CEQA_California_2019_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Inputs.gdb\CA_ms58_very_high_landslide_susceptibility_1s"
 #landslide_hazard_raster = r"\\loxodonta\gis\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Data\Rasters\req9_5_LandslideHazard_20240118.tif"
+
 # New 1m version (02/02/2024)
+landslide_hazard_raster = r"\\loxodonta\gis\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Data\Rasters\req9_5_LandslideHazard_1m_20240118.tif"
+
+# 05/12/2025 (10m)
+landslide_hazard_raster = r"\\loxodonta\GIS\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Data\Rasters\req9_5_LandslideHazard_202505.tif"
+
+# 05/20/2025 (Now resolution is 1m)
+landslide_hazard_raster = r"\\loxodonta\GIS\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Data\Rasters\req9_5_LandslideHazard_202505.tif"
+
+#05/12/2025 resample to 1m to address Riverside county error (only used on Riverside). ERROR
+#landslide_hazard_raster = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Test\req9_5_LandslideHazard_202505_1m.tif"
+
+# Retry old 1m version from 02/02/2024. ERROR
 #landslide_hazard_raster = r"\\loxodonta\gis\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Data\Rasters\req9_5_LandslideHazard_1m_20240118.tif"
-# 05/12/2025
-landslide_hazard_raster = r"\\loxodonta\gis\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Data\Rasters\req9_5_LandslideHazard_202505.tif"
+
+# Try clipped version. ERROR
+#landslide_hazard_raster = r"P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Test\req9_5_LandslideHazard_202505_clip_riverside.tif"
 
 # 9.6
 state_conservancy_fc = r"P:\Projects3\CDT-CEQA_California_2019_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Inputs.gdb\CA_State_Conservancy_ds1754"
@@ -410,8 +538,8 @@ exemptions = {
 # DATA PROCESSING FUNCTIONS ############################################################################################
 
 if input_parcels_fc_list == "*":
-    input("All parcels will be processed. Deleting the requirements and exemptions tables will increase performance." +
-          " It is recommended that you do that now (after backing up those tables to a new geodatabase in the Archive folder). " +
+    input("All parcels will be processed. Depending on the number of requirements being run, deleting the requirements and exemptions tables may increase performance." +
+          " If running many requirements (unknown how many), it is recommended that you do that now (after backing up those tables to a new geodatabase in the Archive folder). " +
           " No need to delete the county parcels, unless those data have changed. " +
           " When you're ready, push any key to continue...")
 
@@ -683,7 +811,9 @@ class RequirementFunctions(object):
         wildfire_hazard_layer = arcpy.MakeFeatureLayer_management(wildfire_hazard_fc)
         #expression = "\"HAZ_CLASS\" = 'High' or \"HAZ_CLASS\" = 'Very High'"
         # 05/12/2025 Update
-        expression = "\"FHSZ_Description\" = 'High' or \"FHSZ_Description\" = 'Very High'"
+        #expression = "\"FHSZ_Description\" = 'High' or \"FHSZ_Description\" = 'Very High'"
+        # 06/03/2025 Update (After consulting with Natalie, Brianne instructed us to include the "Moderate" category)
+        expression = "\"FHSZ_Description\" = 'High' or \"FHSZ_Description\" = 'Very High'  or \"FHSZ_Description\" = 'Moderate'"
         wildfire_hazard_types_selected = arcpy.SelectLayerByAttribute_management(wildfire_hazard_layer, "NEW_SELECTION", expression)
 
         arcpy.SelectLayerByLocation_management(output_parcels_layer, "INTERSECT", wildfire_hazard_types_selected)
@@ -711,12 +841,20 @@ class RequirementFunctions(object):
             Description: Select parcels that intersect the Landslide Hazard dataset. Yes = 0, No = 1
         """
         # Get the resolution of the landslide hazard raster
+
+        #arcpy.env.parallelProcessingFactor = "50%"
+        #arcpy.env.processorType = "GPU"
+
         landslide_hazard_raster_resolution = float(arcpy.GetRasterProperties_management(landslide_hazard_raster, "CELLSIZEX")[0])
+
+        #arcpy.env.cellSize = landslide_hazard_raster_resolution
+        #arcpy.env.extent = output_parcels_fc
+        #arcpy.env.snapRaster = landslide_hazard_raster
 
         print("Calculating Zonal Statistics...")
         # Calculate zonal stats to get a count of the number of landslide hazard pixels within each parcel.
         tmp_zonal_stats_table = scratch_ws + os.sep + "landslide_hazard_zonal_stats_subset"
-        arcpy.sa.ZonalStatisticsAsTable(output_parcels_fc, parcel_id_field, landslide_hazard_raster, tmp_zonal_stats_table, "", "SUM")
+        arcpy.sa.ZonalStatisticsAsTable(output_parcels_fc, parcel_id_field, landslide_hazard_raster, tmp_zonal_stats_table, "DATA", "SUM")
 
         print("Joining Zonal Stats table to the parcels dataset...")
         # Join the zonal stats table (output_parcels_fc, just the "COUNT" field) to the parcels feature class.
