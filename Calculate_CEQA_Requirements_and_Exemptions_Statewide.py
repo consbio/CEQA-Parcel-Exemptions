@@ -40,7 +40,7 @@
 # Don't delete the tables if running individual requirements for some or all counties
 
 # Indicating the parcel feature classes to process:
-# Use "*" to process all counties, or create a list of counties to process. Examples:
+# Use "*" to process all counties (currently 58), or create a list of counties to process. Examples:
 # input_parcels_fc_list = "*"
 # input_parcels_fc_list = ["SANBENITO_Parcels", "SANBERNARDINO_Parcels"].
 # For one county, also use a list. For example, ["SANBENITO_Parcels"]
@@ -67,104 +67,9 @@ favorites_dir = appdata_dir + "\Esri\ArcGISPro\Favorites"
 
 ########################################### CEQA Phase 2.0 Runs ########################################################
 
-# 04/03/23 Run #1
-# Notes: Uses parcels data from CEQA version 1.0 (DigiMap/Lightbox). Updated data for 3.6 and 3.8.
-requirements_to_process = ["3.6", "3.8"]
-input_parcels_fc_list = "*"
-
-# 05/04/23 Run #2
-# Notes: Uses new parcels data (Statewide ec9dc5c9-e485-11ed-8586-c45ab1d6625e, separated into counties).
-requirements_to_process = "*"
-input_parcels_fc_list = "*"
-
-# 05/18/23 Run #3
-# Notes: Updates to Specific Plan, VMT, and HQTC data (from Justin Heyerdahl).
-requirements_to_process = ["2.6", "3.2", "3.4", "3.5", "3.6", "3.8"]
-input_parcels_fc_list = "*"
-
-# 05/23/23 Run #4
-# Notes: Updates to VMT data and new path to specific plan data (from Justin Heyerdahl).
-requirements_to_process = ["2.6", "3.6", "3.8"]
-input_parcels_fc_list = "*"
-
-# 10/06/23 Run #5
-# Notes: Several updates to the transportation and location requirements.
-requirements_to_process = "*"
-input_parcels_fc_list = "*"
-
-# 11/30/2023 Run #6
-# Notes: Re-run using updated version of the Statewide Toolbox (Statewide.tbx). The old Statewide_2023_v2_1.tbx was used for the previous run.
-#requirements_to_process = ["3.1", "3.2", "3.4", "3.5", "8.1", "8.2"]
-#input_parcels_fc_list = "*"
-
-# 01/22/2024 Run #7 (v5.3)
-# Notes: Data updates. Updates to NULL data list.
-#requirements_to_process = ["2.6", "3.1", "3.2", "3.3", "3.4", "3.5", "9.2"]
-#input_parcels_fc_list = "*"
-
-# 01/23/2024 Run #8 (v5.4)
-#requirements_to_process = ["9.5"]
-#input_parcels_fc_list = "*"
-
-# 02/02/2024 Run #9 (v5.5)
-# Duration: 1 day, 0:23:23.437617
-# Rerun with 1m landslide raster.
-#requirements_to_process = ["9.5"]
-#input_parcels_fc_list = "*"
-
-# 02/26/2024 Run #10 (v5.6)
-# Duration: 4:38:20.836241 (new workstation)
-# Updates to NULL list and
-requirements_to_process = ["2.6"]
-input_parcels_fc_list = "*"
-
-# 05/12/2025 Run #11 (v5.7)
-# Duration:
-# Updates to 3.1, 3.2, 3.3, 3.4, 3.5, 3.8, 9.2 (Justin) + 9.3 (Mike) & 9.5 (Justin updated data)
-requirements_to_process = "*"
-input_parcels_fc_list = [
-"SACRAMENTO_Parcels",
-"SANBENITO_Parcels",
-"SANBERNARDINO_Parcels",
-"SANDIEGO_Parcels",
-"SANFRANCISCO_Parcels",
-"SANJOAQUIN_Parcels",
-"SANLUISOBISPO_Parcels",
-"SANMATEO_Parcels",
-"SANTABARBARA_Parcels",
-"SANTACLARA_Parcels",
-"SANTACRUZ_Parcels",
-"SHASTA_Parcels",
-"SIERRA_Parcels",
-"SISKIYOU_Parcels",
-"SOLANO_Parcels",
-"SONOMA_Parcels",
-"STANISLAUS_Parcels",
-"SUTTER_Parcels",
-"TEHAMA_Parcels",
-"TRINITY_Parcels",
-"TULARE_Parcels",
-"TUOLUMNE_Parcels",
-"VENTURA_Parcels",
-"YOLO_Parcels",
-"YUBA_Parcels",
-]
-
-# Duration for counties above:
-# Duration: 23:04:56.923772
-
-# 05/20/2025
-input_parcels_fc_list = ["RIVERSIDE_Parcels"]
-requirements_to_process = ["9.6", "9.7", "9.8"]  # Succeeded with Python 3.x/ArcGIS Pro interpreter.
-requirements_to_process = ["9.5"]  # RIVERSIDE Fails with Python 3.x/ArcGIS Pro interpreter. Succeeded with Python 2.7/ArcGIS Desktop interpreter and new 1m version.
-
-# 05/20/2025
-# Rerun 9.5 for remaining counties using 1m version and Python 3.x/ArcGIS Pro.
-requirements_to_process = ["9.5"]
+# 04/03/23 - 05/20/25 (Archived in 20251028)
 
 # 05/21/2025
-# Rerun all (without RIVERSIDE 1st), just in case the dev team identifies problems with surgery performed on last run.
-# If dev team confirms all is good, delete resulting requirements & exemptions tables (and rename exemptions_v5_7_20250521 and requirements_v5_7_20250521 back to requirements and exemptions).
 requirements_to_process = "*"
 input_parcels_fc_list = [
 "ALAMEDA_Parcels",
@@ -227,8 +132,14 @@ input_parcels_fc_list = [
 "YUBA_Parcels",
 ]
 
-# 06/03/2025
+# 06/03/2025 (v5.8)
 # Rerun 9.3 (Wildfire Hazard). After consulting with Natalie, Brianne instructed us to include the "Moderate" class.
+requirements_to_process = ["9.3"]
+input_parcels_fc_list = "*"
+
+# 06/18/2025 (v5.9)
+# Rerun 9.3 (Wildfire Hazard) using updated 2025 wildfire hazard data sent by Brianne on 04/23/2025 (FHSZALL_v25_1).
+# An older version was used for the last run (FHSZSRA_23_3).
 requirements_to_process = ["9.3"]
 input_parcels_fc_list = "*"
 
@@ -249,6 +160,7 @@ scratch_ws = "P:\Projects3\CEQA_Site_Check_Version_2_0_2023_mike_gough\Tasks\CEQ
 #statewide_toolbox = r"\\loxodonta\GIS\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_charlotte_smith\Tasks\CEQA_revisions_2023_03\Tools\Models\Statewide_2023_v2_0.tbx"
 #statewide_toolbox = r"\\loxodonta\GIS\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Tools\Models\Statewide_2023_v2_1.tbx"
 #statewide_toolbox = r"\\loxodonta\GIS\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Tools\Models\Statewide.tbx"
+
 # 05/12/2025
 statewide_toolbox = r"\\loxodonta\GIS\Projects\CEQA_Site_Check_Version_2_0_2023\Workspaces\CEQA_Site_Check_Version_2_0_2023_justin_heyerdahl\Tools\Models\Statewide_202505"
 statewide_toolbox_alias = "Statewide"
@@ -285,19 +197,6 @@ parcel_id_field = "cbi_parcel_id_fips_apn_oid"
 county_name_field = "county_name"
 
 # Datasets used in calculating requirements:
-######################################## CEQA version 1.0 2021 Cities ##################################################
-# 0.1, 2.1
-#urbanized_area_prc_21071_fc = r"P:\Projects3\CEQA_Site_Check_Version_1_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Intermediate.gdb\urbanized_area_prc_21071_v1_0"
-
-# 2.2
-#urban_area_prc_21094_5_fc = r"P:\Projects3\CEQA_Site_Check_Version_1_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Intermediate.gdb\urban_area_prc_21094_5_v1_0"
-
-# 0.1, 2.3
-#city_boundaries_fc = r"\\loxodonta\GIS\Source_Data\boundaries\state\CA\California_Incorporated_Cities\incorp21_2.shp"
-#unincorporated_islands = r"P:\Projects3\CEQA_Site_Check_Version_1_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Intermediate.gdb\Unincorporated_Islands_CALFIRE_2021_with_Population_Dissolve" #2.2
-
-# 2.4 # Select within incorporated cities, then switch the selection
-#incorporated_place_fc = r"\\loxodonta\GIS\Source_Data\boundaries\state\CA\California_Incorporated_Cities\incorp21_2.shp"
 
 ######################################## CEQA version 2.0 2023 Cities ##################################################
 
@@ -332,7 +231,9 @@ prime_farmlands_fc = r"\\loxodonta\gis\Source_Data\farming\state\CA\FMMP\2018_20
 # 9.3
 #wildfire_hazard_fc = r"\\loxodonta\gis\Source_Data\environment\state\CA\Fire_Hazard_Severity_Zones_2017\fhszs06_3.shp"
 # 05/12/2025
-wildfire_hazard_fc =  r"\\loxodonta\gis\Source_Data\environment\state\CA\CALFIRE_FireHazardSeverityZones\2024\FHSZSRA_23_3\FHSZSRA_23_3.gdb\FHSZSRA_23_3"
+# wildfire_hazard_fc =  r"\\loxodonta\gis\Source_Data\environment\state\CA\CALFIRE_FireHazardSeverityZones\2024\FHSZSRA_23_3\FHSZSRA_23_3.gdb\FHSZSRA_23_3"
+# 06/18/2025 # Correction for older version above used by mistake. This is the version sent by Brianne on 04/23/2025.
+wildfire_hazard_fc = r"\\loxodonta\gis\Source_Data\environment\state\CA\CALFIRE_FireHazardSeverityZones\2025\FHSZALL_v25_1.gdb\FHSZALL_v25_1"
 
 # 9.4
 flood_plain_fc = r"P:\Projects3\CDT-CEQA_California_2019_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Inputs\Inputs.gdb\CA_100_Year_FEMA_Floodplain"
