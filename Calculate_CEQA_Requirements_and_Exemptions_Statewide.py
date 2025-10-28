@@ -69,6 +69,16 @@ favorites_dir = appdata_dir + "\Esri\ArcGISPro\Favorites"
 
 # 04/03/23 - 05/20/25 (Archived in 20251028)
 
+# Example Parameters:
+
+# Run all requirements and all counties:
+# requirements_to_process = "*"
+# input_parcels_fc_list = "*"
+
+# Run a subset of requirements and counties:
+# requirements_to_process = ["3.10", "2.6"]
+# input_parcels_fc_list = ["SANBENITO_Parcels", "SANBERNARDINO_Parcels"]
+
 # 05/21/2025
 requirements_to_process = "*"
 input_parcels_fc_list = [
