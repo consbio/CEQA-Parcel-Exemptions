@@ -5,7 +5,7 @@ intermediate_ws = r"P:\Projects3\CEQA_Site_Check_Version_1_0_2021_mike_gough\Tas
 scratch_ws = r"P:\Projects3\CEQA_Site_Check_Version_1_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Scratch\Scratch.gdb"
 
 cities_with_population_fc = r"Database Connections\CBI Intermediate.sde\cbiintermediate.mike_gough.California_Incorporated_Cities_CALFIRE_2021_Join_ACS_2020"
-unincorporated_islands_with_population_fc = "P:\Projects3\CEQA_Site_Check_Version_1_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Intermediate.gdb\Unincorporated_Islands_CALFIRE_2021_with_Population_Dissolve"
+unincorporated_islands_with_population_fc = r"P:\Projects3\CEQA_Site_Check_Version_1_0_2021_mike_gough\Tasks\CEQA_Parcel_Exemptions\Data\Intermediate\Intermediate.gdb\Unincorporated_Islands_CALFIRE_2021_with_Population_Dissolve"
 urbanized_area_prc_21071 = intermediate_ws + os.sep + "urbanized_area_prc_21071_v1_0"
 
 arcpy.Union_analysis([cities_with_population_fc, unincorporated_islands_with_population_fc], urbanized_area_prc_21071)
@@ -69,11 +69,11 @@ with arcpy.da.UpdateCursor(urbanized_area_prc_21071, fields) as uc:
 
         if name:
             # City Name Field
-            print name
+            print(name)
             row[5] = name
             # Set Community Type Field
             community_type = "Incorporated City"
-            print community_type
+            print(community_type)
             row[15] = community_type
             population_estimate = row[2]
             row[6] = int(population_estimate)
@@ -83,7 +83,7 @@ with arcpy.da.UpdateCursor(urbanized_area_prc_21071, fields) as uc:
             row[5] = "Unincorporated Island"
             # Set Community Type Field
             community_type = row[5]
-            print community_type
+            print(community_type)
             row[15] = community_type
             population_estimate = row[3]
             row[6] = int(population_estimate)
@@ -95,7 +95,7 @@ with arcpy.da.UpdateCursor(urbanized_area_prc_21071, fields) as uc:
     for row in uc:
 
         oid = row[7]
-        print "\nOBJECTID: " + str(oid)
+        print("\nOBJECTID: " + str(oid))
 
         namelsad = row[1]  # City Name of this polygon
         area_km2 = row[13]  # Area of this polygon
@@ -129,10 +129,10 @@ with arcpy.da.UpdateCursor(urbanized_area_prc_21071, fields) as uc:
 
             surrounding_population_list_sorted = sorted(surrounding_population_list)
 
-            print " Surrounding City Count:" + str(surrounding_city_count)
-            print " Surrounding Population List:" + str(surrounding_population_list_sorted)
-            print " Surrounding Population:" + str(surrounding_population_total)
-            print " Surrounding Area:" + str(surrounding_area)
+            print(" Surrounding City Count:" + str(surrounding_city_count))
+            print(" Surrounding Population List:" + str(surrounding_population_list_sorted))
+            print(" Surrounding Population:" + str(surrounding_population_total))
+            print(" Surrounding Area:" + str(surrounding_area))
 
         # If there area surrounding cities, populate surrounding city fields. If not, leave NULL <null>.
         row[8] = surrounding_city_count
@@ -147,7 +147,7 @@ with arcpy.da.UpdateCursor(urbanized_area_prc_21071, fields) as uc:
 
         # Incorporated City
         if community_type == "Incorporated City":
-            print "Incorporated City"
+            print("Incorporated City")
             if population_estimate > 100000:
                 result = 1
 
@@ -162,7 +162,7 @@ with arcpy.da.UpdateCursor(urbanized_area_prc_21071, fields) as uc:
 
                 # Add the population of the surrounding city or cites to the population of the current city in the cursor
                 city_pop_plus_largest_two_surrounding_populations = population_estimate + sum_largest_two_surrounding_populations
-                print "City Population including top two surrounding cities: " + str(city_pop_plus_largest_two_surrounding_populations)
+                print("City Population including top two surrounding cities: " + str(city_pop_plus_largest_two_surrounding_populations))
 
                 # if the selected city + the two largest surrounding cities  have a population > 100,000, result = 1.
                 if city_pop_plus_largest_two_surrounding_populations >= 100000:
@@ -170,7 +170,7 @@ with arcpy.da.UpdateCursor(urbanized_area_prc_21071, fields) as uc:
 
         # Unincorporated
         else:
-            print "Unincorporated Island"
+            print("Unincorporated Island")
 
             # Add the population of the unincorporated polygon and the population of the surrounding incorporated city or cities.
             unincorporated_pop_plus_surrounding_populations = population_estimate + surrounding_population_total
